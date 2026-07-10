@@ -730,10 +730,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($totalAmountBT108 - $calculatedAmountBT99) le ($nbChargeItems* 0.01)) or  (not(cbc:AllowanceTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]))"/>
+         <xsl:when test="(abs($totalAmountBT108 - $calculatedAmountBT99) le ($nbChargeItems* 0.01)) or  (not(cbc:ChargeTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($totalAmountBT108 - $calculatedAmountBT99) le ($nbChargeItems* 0.01)) or (not(cbc:AllowanceTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]))">
+                                test="(abs($totalAmountBT108 - $calculatedAmountBT99) le ($nbChargeItems* 0.01)) or (not(cbc:ChargeTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]))">
                <xsl:attribute name="id">BR-FREXT-CO-12</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">

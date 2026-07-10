@@ -5,7 +5,7 @@
     Réalisé par Quentin Houard et Cyrille Sautereau pour le compte du FNFE-MPE.
 
 -->
-<!-- Schematron 20260430_EXTENDED-CTC-FR-UBL-V1.4.0 - based on Schematron EN16931 version 1.3.15 - Last update: 2026-06-30-->
+<!-- Schematron 20260430_EXTENDED-CTC-FR-UBL-V1.4.0.01 - based on Schematron EN16931 version 1.3.15 - Last update: 2026-07-10-->
 
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
   <title>EN16931  model bound to UBL</title>
@@ -103,8 +103,8 @@
         Somme calculée : <value-of select='$calculatedAmountBT92'/>, Total HT (BT-107) : <value-of select='$totalAmountBT107'/>, nbelements : <value-of select='$nbAllowanceItems'/>, Ecart calculé : <value-of select='abs($totalAmountBT107 - $calculatedAmountBT92)'/>,
         [BR-FREXT-CO-11] - Écart absolu entre le total des remises (BT-107) et la somme des montants de remise (BT-92) ≤ 0,01 € * nombre de remises.
       </assert>
-      
-      <assert id="BR-FREXT-CO-12" flag="fatal" test="(abs($totalAmountBT108 - $calculatedAmountBT99) le ($nbChargeItems* 0.01)) or  (not(cbc:AllowanceTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]))">
+      <!-- Correction V1.4.0.01 fix xpath BR-DREXT-CO-12 cbc:ChargeTotalAmount instead of cbc:AllowanceTotalAmount -->
+      <assert id="BR-FREXT-CO-12" flag="fatal" test="(abs($totalAmountBT108 - $calculatedAmountBT99) le ($nbChargeItems* 0.01)) or  (not(cbc:ChargeTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]))">
         Somme calculée : <value-of select='$calculatedAmountBT99'/>, Total HT (BT-108) : <value-of select='$totalAmountBT108'/>, nbelements : <value-of select='$nbChargeItems'/>, Ecart calculé : <value-of select='abs($totalAmountBT108 - $calculatedAmountBT99)'/>,
         [BR-FREXT-CO-12] - Écart absolu entre le total des charges (BT-108) et la somme des montants de charge (BT-99) ≤ 0,01 € * nombre de charges.
       </assert>
