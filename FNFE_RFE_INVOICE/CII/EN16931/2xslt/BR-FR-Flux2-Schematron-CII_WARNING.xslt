@@ -3166,7 +3166,7 @@
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FR-28] : La valeur d’attribut (cbc:Value) ou la valeur (cbc:ValueQuantity avec unité de mesure) doivent être présents, mais pas les deux
+        [BR-FR-28] : La valeur d’attribut (ram:Value) ou la valeur (ram:ValueMeasure avec unité de mesure) doivent être présents, mais pas les deux
         Valeur actuelle Value : "<xsl:text/>
                   <xsl:value-of select="ram:Value"/>
                   <xsl:text/>", Valeur actuelle Value Quantity : "<xsl:text/>

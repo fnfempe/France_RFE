@@ -7,7 +7,7 @@
 
 -->
 <!-- Schematron 20260630_BR-FR-Flux2-Schematron-CII_V1.4.0 - last update 2026 06 30 
-    Mode "WARNING" APPLICABLE EN RECEPTION DES LA PUBLICATION ET JUSQU'AU SEPTEMBRE 2026 AU PLUS TARD.
+    Mode "WARNING" APPLICABLE EN RECEPTION DES LA PUBLICATION ET JUSQU'AU 30 SEPTEMBRE 2026 AU PLUS TARD.
                    APPICALBLE EN EMMISSION DES LA PUBLICATION ET JUSQU'AU 31 AOUT 2026 AU PLUS TARD -->
 
 <schema xmlns="http://purl.oclc.org/dsdl/schematron"
@@ -960,7 +960,7 @@
     <rule context="rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedTradeProduct/ram:ApplicableProductCharacteristic">  
       <assert test="(exists(ram:Value) and not(exists(ram:ValueMeasure))) or (not(exists(ram:Value)) and (exists(ram:ValueMeasure[@unitCode!=''])))"
         flag="warning" id="BR-FR-28-Value">
-        [BR-FR-28] : La valeur d’attribut (cbc:Value) ou la valeur (cbc:ValueQuantity avec unité de mesure) doivent être présents, mais pas les deux
+        [BR-FR-28] : La valeur d’attribut (ram:Value) ou la valeur (ram:ValueMeasure avec unité de mesure) doivent être présents, mais pas les deux
         Valeur actuelle Value : "<value-of select="ram:Value"/>", Valeur actuelle Value Quantity : "<value-of select="ram:ValueMeasure"/>". unité de mesure : "<value-of select="ram:ValueMeasure/@unitCode"/>"
         Veuillez fournir une valeur d’attribut valide ou utiliser une Valeur avec unité de mesure.
       </assert>

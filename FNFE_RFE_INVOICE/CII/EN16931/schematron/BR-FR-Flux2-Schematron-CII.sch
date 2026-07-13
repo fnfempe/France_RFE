@@ -959,7 +959,7 @@
     <rule context="rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedTradeProduct/ram:ApplicableProductCharacteristic">  
       <assert test="(exists(ram:Value) and not(exists(ram:ValueMeasure))) or (not(exists(ram:Value)) and (exists(ram:ValueMeasure[@unitCode!=''])))"
         flag="fatal" id="BR-FR-28-Value">
-        [BR-FR-28] : La valeur d’attribut (cbc:Value) ou la valeur (cbc:ValueQuantity avec unité de mesure) doivent être présents, mais pas les deux
+        [BR-FR-28] : La valeur d’attribut (ram:Value) ou la valeur (ram:ValueMeasure avec unité de mesure) doivent être présents, mais pas les deux
         Valeur actuelle Value : "<value-of select="ram:Value"/>", Valeur actuelle Value Quantity : "<value-of select="ram:ValueMeasure"/>". unité de mesure : "<value-of select="ram:ValueMeasure/@unitCode"/>"
         Veuillez fournir une valeur d’attribut valide ou utiliser une Valeur avec unité de mesure.
       </assert>
