@@ -45,9 +45,9 @@
       <xsl:variable name="isFormatValid"
                     select="matches($date, '^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$')"/>
       <!-- Extraction des composantes -->
-      <xsl:variable name="year" select="number(substring($date, 1, 4))"/>
-      <xsl:variable name="month" select="number(substring($date, 6, 2))"/>
-      <xsl:variable name="day" select="number(substring($date, 9, 2))"/>
+      <xsl:variable name="year" select="xs:decimal(substring($date, 1, 4))"/>
+      <xsl:variable name="month" select="xs:decimal(substring($date, 6, 2))"/>
+      <xsl:variable name="day" select="xs:decimal(substring($date, 9, 2))"/>
       <!-- Calcul année bissextile -->
       <xsl:variable name="isLeapYear"
                     select="($year mod 4 = 0 and $year mod 100 != 0) or ($year mod 400 = 0)"/>
@@ -1505,7 +1505,7 @@
    <xsl:template match="ubl:Invoice | cn:CreditNote" priority="1000" mode="M28">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ubl:Invoice | cn:CreditNote"/>
-      <xsl:variable name="allNotes" select="string-join(./cbc:Note, '')"/>
+      <xsl:variable name="allNotes" select="string-join(./cbc:Note, '#')"/>
       <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="contains($allNotes, '#PMT#')"/>
@@ -1569,7 +1569,7 @@
    <xsl:template match="ubl:Invoice | cn:CreditNote" priority="1000" mode="M29">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ubl:Invoice | cn:CreditNote"/>
-      <xsl:variable name="allNotes" select="string-join(./cbc:Note, '')"/>
+      <xsl:variable name="allNotes" select="string-join(./cbc:Note, '#')"/>
       <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="count(tokenize($allNotes, '#PMT#')) - 1  le 1"/>
@@ -1664,7 +1664,7 @@
                <svrl:text>
         [BR-FR-08/BT-23] : La valeur du cadre de facturation (ram:ID) est absente ou n’est pas autorisée. Valeurs acceptées : B1, S1, M1, B2, S2, M2, S3, B4, S4, M4, S5, S6, B7, S7, B8, S8, M8, B9, S9, M9.
         Valeur actuelle : "<xsl:text/>
-                  <xsl:value-of select="."/>
+                  <xsl:value-of select="cbc:ProfileID"/>
                   <xsl:text/>".
         Veuillez utiliser une valeur conforme à la liste des modes de facturation autorisés.
       </svrl:text>
@@ -2044,8 +2044,7 @@
    <xsl:template match="ubl:Invoice | cn:CreditNote" priority="1000" mode="M33">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ubl:Invoice | cn:CreditNote"/>
-      <xsl:variable name="allNotes"
-                    select="string-join(./cbc:Note, '')[contains(., '#BAR#')]"/>
+      <xsl:variable name="allNotes" select="string-join(./cbc:Note, '#')"/>
       <xsl:variable name="afterBar" select="substring-after($allNotes, '#BAR#')"/>
       <xsl:variable name="barTreatment"
                     select="if (contains($afterBar, '#')) then substring-before($afterBar, '#') else $afterBar"/>
@@ -2482,8 +2481,7 @@
    <xsl:template match="ubl:Invoice | cn:CreditNote" priority="1000" mode="M40">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ubl:Invoice | cn:CreditNote"/>
-      <xsl:variable name="allNotes"
-                    select="string-join(./cbc:Note, '')[contains(., '#BAR#')]"/>
+      <xsl:variable name="allNotes" select="string-join(./cbc:Note, '#')"/>
       <xsl:variable name="afterBar" select="substring-after($allNotes, '#BAR#')"/>
       <xsl:variable name="barTreatment"
                     select="if (contains($afterBar, '#')) then substring-before($afterBar, '#') else $afterBar"/>
@@ -2520,8 +2518,7 @@
    <xsl:template match="ubl:Invoice | cn:CreditNote" priority="1000" mode="M41">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ubl:Invoice | cn:CreditNote"/>
-      <xsl:variable name="allNotes"
-                    select="string-join(./cbc:Note, '')[contains(., '#BAR#')]"/>
+      <xsl:variable name="allNotes" select="string-join(./cbc:Note, '#')"/>
       <xsl:variable name="afterBar" select="substring-after($allNotes, '#BAR#')"/>
       <xsl:variable name="treatment"
                     select="if (contains($afterBar, '#')) then substring-before($afterBar, '#') else $afterBar"/>
@@ -2570,8 +2567,7 @@
    <xsl:template match="ubl:Invoice | cn:CreditNote" priority="1000" mode="M42">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ubl:Invoice | cn:CreditNote"/>
-      <xsl:variable name="allNotes"
-                    select="string-join(./cbc:Note, '')[contains(., '#BAR#')]"/>
+      <xsl:variable name="allNotes" select="string-join(./cbc:Note, '#')"/>
       <xsl:variable name="afterBar" select="substring-after($allNotes, '#BAR#')"/>
       <xsl:variable name="treatment"
                     select="if (contains($afterBar, '#')) then substring-before($afterBar, '#') else $afterBar"/>
@@ -2584,10 +2580,10 @@
                     select="cac:AccountingSupplierParty/cac:Party/cbc:EndpointID/@schemeID"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not($treatment) or not($typeCode = ('389', '501', '500', '471', '473', '261', '502')) or          (starts-with($endpointID, $siren) and $schemeID = '0225')"/>
+         <xsl:when test="not($treatment='B2B') or not($typeCode = ('389', '501', '500', '471', '473', '261', '502')) or          (starts-with($endpointID, $siren) and $schemeID = '0225')"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not($treatment) or not($typeCode = ('389', '501', '500', '471', '473', '261', '502')) or (starts-with($endpointID, $siren) and $schemeID = '0225')">
+                                test="not($treatment='B2B') or not($typeCode = ('389', '501', '500', '471', '473', '261', '502')) or (starts-with($endpointID, $siren) and $schemeID = '0225')">
                <xsl:attribute name="id">BR-FR-22_BT-34</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
@@ -3741,7 +3737,8 @@
       <xsl:variable name="typeCode" select="cbc:InvoiceTypeCode | cbc:CreditNoteTypeCode"/>
       <xsl:variable name="billingContext" select="cbc:ProfileID"/>
       <xsl:variable name="issueDate" select="cbc:IssueDate"/>
-      <xsl:variable name="dueDate" select="cbc:DueDate"/>
+      <xsl:variable name="dueDate"
+                    select="cbc:DueDate | cac:PaymentMeans/cbc:PaymentDueDate"/>
       <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="not($dueDate and not($typeCode = '386' or $typeCode = '500' or $typeCode = '503' or $billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') and $dueDate &lt; $issueDate)"/>
@@ -3826,10 +3823,10 @@
                     select="cbc:DueDate | cac:PaymentMeans/cbc:PaymentDueDate"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (number($paidAmount) = number($grandTotal))"/>
+         <xsl:when test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($paidAmount) = xs:decimal($grandTotal))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (number($paidAmount) = number($grandTotal))">
+                                test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($paidAmount) = xs:decimal($grandTotal))">
                <xsl:attribute name="id">BR-FR-CO-09_BT-23-1</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
@@ -3848,10 +3845,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (number($payableAmount) = 0)"/>
+         <xsl:when test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($payableAmount) = 0)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (number($payableAmount) = 0)">
+                                test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($payableAmount) = 0)">
                <xsl:attribute name="id">BR-FR-CO-09_BT-23-2</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
@@ -4366,8 +4363,7 @@
                        context="ubl:Invoice | cn:CreditNote"/>
       <xsl:variable name="isAU"
                     select="exists(cac:AccountingSupplierParty/cac:Party/cac:PartyIdentification/cbc:ID[@schemeID = '0231'])"/>
-      <xsl:variable name="allNotes"
-                    select="string-join(./cbc:Note, '')[contains(., '#TXD#')]"/>
+      <xsl:variable name="allNotes" select="string-join(./cbc:Note, '#')"/>
       <xsl:variable name="afterTXD" select="substring-after($allNotes, '#TXD#')"/>
       <xsl:variable name="ValeurTXD"
                     select="if (contains($afterTXD, '#')) then substring-before($afterTXD, '#') else $afterTXD"/>
@@ -5517,10 +5513,10 @@
                     select="count((../../cac:InvoiceLine| ../../cac:CreditNoteLine)[cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID  and cac:InvoiceDocumentReference/cbc:DocumentStatusCode != 'INFORMATION' and cac:BillingReferenceLine/cbc:ID = $grouplineID]]/cbc:LineExtensionAmount)"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or (abs(number(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)"/>
+         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or (abs(xs:decimal(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or (abs(number(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)">
+                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or (abs(xs:decimal(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)">
                <xsl:attribute name="id">BR-FR-MV-05_EXT-FR-FE-BG-12</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -5695,10 +5691,10 @@
       <xsl:variable name="invcurrency" select="../../cbc:DocumentCurrencyCode"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or (abs(number(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"/>
+         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or (abs(xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or (abs(number(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)">
+                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or (abs(xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)">
                <xsl:attribute name="id">BR-FR-MV-09_EXT-FR-FE-181</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -5736,13 +5732,13 @@
       <xsl:variable name="invcurrency" select="../../cbc:DocumentCurrencyCode"/>
       <xsl:variable name="parentlineID" select="../cbc:ID"/>
       <xsl:variable name="nbligne"
-                    select="count((../../cac:InvoiceLine| ../../cac:CreditNoteLine)/cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID][cac:InvoiceDocumentReference/cbc:DocumentStatusCode = 'DETAIL' and cac:BillingReferenceLine/cbc:ID = $parentlineID])"/>
+                    select="count((../../cac:InvoiceLine| ../../cac:CreditNoteLine)/cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID][cac:InvoiceDocumentReference/cbc:DocumentStatusCode = ('DETAIL', 'GROUP') and cac:BillingReferenceLine/cbc:ID = $parentlineID])"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or not(../cbc:TaxInclusiveLineExtensionAmount)          or (normalize-space(../cbc:TaxInclusiveLineExtensionAmount) != ''          and abs(number(../cbc:TaxInclusiveLineExtensionAmount)          - number(../cbc:LineExtensionAmount)          - number(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"/>
+         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or not(../cbc:TaxInclusiveLineExtensionAmount)          or (normalize-space(../cbc:TaxInclusiveLineExtensionAmount) != ''          and abs(xs:decimal(../cbc:TaxInclusiveLineExtensionAmount)          - xs:decimal(../cbc:LineExtensionAmount)          - xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or not(../cbc:TaxInclusiveLineExtensionAmount) or (normalize-space(../cbc:TaxInclusiveLineExtensionAmount) != '' and abs(number(../cbc:TaxInclusiveLineExtensionAmount) - number(../cbc:LineExtensionAmount) - number(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)">
+                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or not(../cbc:TaxInclusiveLineExtensionAmount) or (normalize-space(../cbc:TaxInclusiveLineExtensionAmount) != '' and abs(xs:decimal(../cbc:TaxInclusiveLineExtensionAmount) - xs:decimal(../cbc:LineExtensionAmount) - xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)">
                <xsl:attribute name="id">BR-FR-MV-10_EXT-FR-FE-184</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -5763,7 +5759,7 @@
         HT : <xsl:text/>
                   <xsl:value-of select="../cbc:LineExtensionAmount"/>
                   <xsl:text/>
-        Lorsque le cadre de facturation (BT-23) est S8, B8, M8 ou S9, B9, M9, si le montant total avec TVA (EXT-FR-FE-184) est présent pour une ligne GROUP sans parent, alors la différence entre ce montant et la somme du montant HT (BT-131) et du montant TVA (EXT-FR-FE-181) doit être inférieure ou égale à 0,01 × le nombre de sous-lignes DETAIL. Valeur actuelle : "<xsl:text/>
+        Lorsque le cadre de facturation (BT-23) est S8, B8, M8 ou S9, B9, M9, si le montant total avec TVA (EXT-FR-FE-184) est présent pour une ligne GROUP sans parent, alors la différence entre ce montant et la somme du montant HT (BT-131) et du montant TVA (EXT-FR-FE-181) doit être inférieure ou égale à 0,01 × le nombre de sous-lignes DETAIL ou GROUP. Valeur actuelle : "<xsl:text/>
                   <xsl:value-of select="."/>
                   <xsl:text/>'.
       </svrl:text>

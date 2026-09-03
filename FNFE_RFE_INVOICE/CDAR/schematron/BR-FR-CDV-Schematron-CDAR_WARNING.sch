@@ -4,9 +4,9 @@
     Schematron Licensed under European Union Public Licence (EUPL) version 1.4.0
     Réalisé par Quentin Houard et Cyrille Sautereau pour le compte du FNFE-MPE.
 -->
-<!-- Schematron 20260630_BR-FR-CDV-Schematron-CDAR_V1.4.0.03 - last update 2026 06 30 - Last fix03 2026 07 31 
-    Mode "WARNING" APPLICABLE EN RECEPTION DES LA PUBLICATION ET JUSQU'AU 30 SEPTEMBRE 2026 AU PLUS TARD.
-                   APPICALBLE EN EMMISSION DES LA PUBLICATION ET JUSQU'AU 31 AOUT 2026 AU PLUS TARD -->
+<!-- Schematron BR-FR-CDV-Schematron-CDAR_V1.4.0.04 - last fix04 2026 09 04 
+    Mode "WARNING" APPLICABLE UNIQUEMENT EN RECEPTION DES LA PUBLICATION ET JUSQU'AU 30 SEPTEMBRE 2026 AU PLUS TARD. -->
+                   
 
 <schema xmlns="http://purl.oclc.org/dsdl/schematron"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -41,9 +41,9 @@
     <xsl:variable name="isFormatValid" select="matches($date, '^20\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$')"/>
     
     <!-- Extraction des composantes -->
-    <xsl:variable name="year" select="number(substring($date, 1, 4))"/>
-    <xsl:variable name="month" select="number(substring($date, 5, 2))"/>
-    <xsl:variable name="day" select="number(substring($date, 7, 2))"/>
+    <xsl:variable name="year" select="xs:decimal(substring($date, 1, 4))"/>
+    <xsl:variable name="month" select="xs:decimal(substring($date, 5, 2))"/>
+    <xsl:variable name="day" select="xs:decimal(substring($date, 7, 2))"/>
     
     <!-- Calcul année bissextile -->
     <xsl:variable name="isLeapYear"
@@ -389,18 +389,25 @@
     
   </pattern>
   
-  <pattern id="BR-FR-CDV-13"> <!-- V1.4.0 : correction Xpath pour MDT-105 -->
+  <pattern id="BR-FR-CDV-13"> <!-- V1.4.0 : correction Xpath pour MDT-105 - fix04 : ajout d'une règle WARNING pour vérifier qu'il existe un GlobalID de type SIREN (schemeID = 0002) -->
     <title>BR-FR-CDV-13 — Présence obligatoire de MDT-129</title>
     
     <rule context="rsm:AcknowledgementDocument/ram:ReferenceReferencedDocument/ram:IssuerTradeParty">
-      <assert test="exists(ram:GlobalID) or /rsm:CrossDomainAcknowledgementAndResponse/rsm:AcknowledgementDocument/ram:ReferenceReferencedDocument/ram:ProcessConditionCode = '501'" 
+      <assert test="(ram:GlobalID!='') or ../ram:ProcessConditionCode = '501'" 
         flag="warning" 
         id="BR-FR-CDV-13_MDT-129">
-        [BR-FR-CDV-13/MDT-129] : L'identifiant du partenaire commercial émetteur (MDT-129) est obligatoire,
+        [BR-FR-CDV-13/MDT-129] : L'identifiant du vendeur émetteur de la facture (en direct ou pour son compte) (MDT-129) est obligatoire,
         sauf si MDT-105 est égal à "501".
         En cas de présence, une valeur au moins doit correspondre à l'Identifiant légal du VENDEUR tel que présent dans la facture en BT-30.
       </assert>
+      
+      <assert test="ram:GlobalID[@schemeID='0002']!='' or ../ram:ProcessConditionCode = '501'" 
+        flag="warning" 
+        id="BR-FR-CDV-13_MDT-129-2">
+        [BR-FR-CDV-13/MDT-129-2] : WARNING - MDT-105 est différent de "501" et il n'y a pas de MDT-129 (ID legal du Vendeur) avec un schemeID = 0002 pour un SIREN. C'est une erreur sauf si le Vendeur n'est pas assujetti à la TVA.
+      </assert>
     </rule>
+ 
   </pattern>
   
   <pattern id="BR-FR-CDV-14"> <!-- V1.4.0 Complément de la règle (présence taux de TVA) -->
@@ -691,9 +698,9 @@
         Veuillez corriger cette valeur si nécessaire.
       </assert>
       
-      <!-- V1.4.0 : ajout de cette règle pour contrôler les motifs de refus B2G -->
+      <!-- V1.4.0 : ajout de cette règle pour contrôler les motifs de refus B2G - fix04 Condition B2G corrected : not(//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] = '9999')  -->
       <assert test="(../../ram:ProcessConditionCode != '210' and (not(../ram:ProcessConditionCode) or ../ram:ProcessConditionCode != '210' )) or (../../ram:ProcessConditionCode = '210' and ../ram:ProcessConditionCode != '210' )
-        or not(exists(//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID)) or //rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] != '9999'
+        or not(exists(//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID)) or not(//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] = '9999')
         or (//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] = '9999'
         and ((.) = 'RETRAIT_MAN_SERV' or (.) = 'ST_CT_NON_DECLAR' or (.) = 'SUPPR_COMP_AVOIR' or (.) = 'TRANSF_PMNT_REGIE' or (.) = 'AUTRE' or (.) = 'COORD_BANC_ERR'
         or (.) = 'TX_TVA_ERR' or (.) = 'MONTANTTOTAL_ERR' or (.) = 'CALCUL_ERR' or (.) = 'NON_CONFORME' or (.) = 'DOUBLON' or (.) = 'DEST_ERR'

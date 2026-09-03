@@ -45,9 +45,9 @@
       <xsl:variable name="isFormatValid"
                     select="matches($date, '^20\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$')"/>
       <!-- Extraction des composantes -->
-      <xsl:variable name="year" select="number(substring($date, 1, 4))"/>
-      <xsl:variable name="month" select="number(substring($date, 5, 2))"/>
-      <xsl:variable name="day" select="number(substring($date, 7, 2))"/>
+      <xsl:variable name="year" select="xs:decimal(substring($date, 1, 4))"/>
+      <xsl:variable name="month" select="xs:decimal(substring($date, 5, 2))"/>
+      <xsl:variable name="day" select="xs:decimal(substring($date, 7, 2))"/>
       <!-- Calcul année bissextile -->
       <xsl:variable name="isLeapYear"
                     select="($year mod 4 = 0 and $year mod 100 != 0) or ($year mod 400 = 0)"/>
@@ -1034,10 +1034,10 @@
                        context="rsm:AcknowledgementDocument/ram:ReferenceReferencedDocument/ram:IssuerTradeParty"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="exists(ram:GlobalID) or /rsm:CrossDomainAcknowledgementAndResponse/rsm:AcknowledgementDocument/ram:ReferenceReferencedDocument/ram:ProcessConditionCode = '501'"/>
+         <xsl:when test="(ram:GlobalID!='') or ../ram:ProcessConditionCode = '501'"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="exists(ram:GlobalID) or /rsm:CrossDomainAcknowledgementAndResponse/rsm:AcknowledgementDocument/ram:ReferenceReferencedDocument/ram:ProcessConditionCode = '501'">
+                                test="(ram:GlobalID!='') or ../ram:ProcessConditionCode = '501'">
                <xsl:attribute name="id">BR-FR-CDV-13_MDT-129</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -1047,6 +1047,23 @@
         [BR-FR-CDV-13/MDT-129] : L'identifiant du vendeur émetteur de la facture (en direct ou pour son compte) (MDT-129) est obligatoire,
         sauf si MDT-105 est égal à "501".
         En cas de présence, une valeur au moins doit correspondre à l'Identifiant légal du VENDEUR tel que présent dans la facture en BT-30.
+      </svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="ram:GlobalID[@schemeID='0002']!='' or ../ram:ProcessConditionCode = '501'"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="ram:GlobalID[@schemeID='0002']!='' or ../ram:ProcessConditionCode = '501'">
+               <xsl:attribute name="id">BR-FR-CDV-13_MDT-129-2</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>
+        [BR-FR-CDV-13/MDT-129-2] : WARNING - MDT-105 est différent de "501" et il n'y a pas de MDT-129 (ID legal du Vendeur) avec un schemeID = 0002 pour un SIREN. C'est une erreur sauf si le Vendeur n'est pas assujetti à la TVA.
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
@@ -1111,7 +1128,7 @@
                <svrl:text>
         [BR-FR-CDV-15/MDT-113] : Code Statut : "<xsl:text/>
                   <xsl:value-of select="."/>
-                  <xsl:text/>" : lorsque le statut (MDT-105 ou MDT-115) est égal à 210 (Refusée), 123 (Rejetée), 501 (Irrecevable), 207 (Litige), 206 (Suspendue) pu 208 (Approuvée Partiellement), lors un MOTIF (MDT-113) DOIT être présent.
+                  <xsl:text/>" : lorsque le statut (MDT-105 ou MDT-115) est égal à 210 (Refusée), 213 (Rejetée), 501 (Irrecevable), 207 (Litige), 206 (Suspendue) pu 208 (Approuvée Partiellement), lors un MOTIF (MDT-113) DOIT être présent.
         Veuillez vérifier la présence et le contenu du MOTIF (MDT-113).
       </svrl:text>
             </svrl:failed-assert>
@@ -1613,10 +1630,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(../../ram:ProcessConditionCode != '210' and (not(../ram:ProcessConditionCode) or ../ram:ProcessConditionCode != '210' )) or (../../ram:ProcessConditionCode = '210' and ../ram:ProcessConditionCode != '210' )         or not(exists(//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID)) or //rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] != '9999'         or (//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] = '9999'         and ((.) = 'RETRAIT_MAN_SERV' or (.) = 'ST_CT_NON_DECLAR' or (.) = 'SUPPR_COMP_AVOIR' or (.) = 'TRANSF_PMNT_REGIE' or (.) = 'AUTRE' or (.) = 'COORD_BANC_ERR'         or (.) = 'TX_TVA_ERR' or (.) = 'MONTANTTOTAL_ERR' or (.) = 'CALCUL_ERR' or (.) = 'NON_CONFORME' or (.) = 'DOUBLON' or (.) = 'DEST_ERR'         or (.) = 'TRANSAC_INC' or (.) = 'EMMET_INC' or (.) = 'CONTRAT_TERM' or (.) = 'DOUBLE_FACT' or (.) = 'CMD_ERR' or (.) = 'ADR_ERR' or (.) = 'REF_CT_ABSENT' or (.) = 'LIVR_INCOMP'))"/>
+         <xsl:when test="(../../ram:ProcessConditionCode != '210' and (not(../ram:ProcessConditionCode) or ../ram:ProcessConditionCode != '210' )) or (../../ram:ProcessConditionCode = '210' and ../ram:ProcessConditionCode != '210' )         or not(exists(//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID)) or not(//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] = '9999')         or (//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] = '9999'         and ((.) = 'RETRAIT_MAN_SERV' or (.) = 'ST_CT_NON_DECLAR' or (.) = 'SUPPR_COMP_AVOIR' or (.) = 'TRANSF_PMNT_REGIE' or (.) = 'AUTRE' or (.) = 'COORD_BANC_ERR'         or (.) = 'TX_TVA_ERR' or (.) = 'MONTANTTOTAL_ERR' or (.) = 'CALCUL_ERR' or (.) = 'NON_CONFORME' or (.) = 'DOUBLON' or (.) = 'DEST_ERR'         or (.) = 'TRANSAC_INC' or (.) = 'EMMET_INC' or (.) = 'CONTRAT_TERM' or (.) = 'DOUBLE_FACT' or (.) = 'CMD_ERR' or (.) = 'ADR_ERR' or (.) = 'REF_CT_ABSENT' or (.) = 'LIVR_INCOMP'))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(../../ram:ProcessConditionCode != '210' and (not(../ram:ProcessConditionCode) or ../ram:ProcessConditionCode != '210' )) or (../../ram:ProcessConditionCode = '210' and ../ram:ProcessConditionCode != '210' ) or not(exists(//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID)) or //rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] != '9999' or (//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] = '9999' and ((.) = 'RETRAIT_MAN_SERV' or (.) = 'ST_CT_NON_DECLAR' or (.) = 'SUPPR_COMP_AVOIR' or (.) = 'TRANSF_PMNT_REGIE' or (.) = 'AUTRE' or (.) = 'COORD_BANC_ERR' or (.) = 'TX_TVA_ERR' or (.) = 'MONTANTTOTAL_ERR' or (.) = 'CALCUL_ERR' or (.) = 'NON_CONFORME' or (.) = 'DOUBLON' or (.) = 'DEST_ERR' or (.) = 'TRANSAC_INC' or (.) = 'EMMET_INC' or (.) = 'CONTRAT_TERM' or (.) = 'DOUBLE_FACT' or (.) = 'CMD_ERR' or (.) = 'ADR_ERR' or (.) = 'REF_CT_ABSENT' or (.) = 'LIVR_INCOMP'))">
+                                test="(../../ram:ProcessConditionCode != '210' and (not(../ram:ProcessConditionCode) or ../ram:ProcessConditionCode != '210' )) or (../../ram:ProcessConditionCode = '210' and ../ram:ProcessConditionCode != '210' ) or not(exists(//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID)) or not(//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] = '9999') or (//rsm:ExchangedDocument/ram:SenderTradeParty/ram:GlobalID[@schemeID = '0238'] = '9999' and ((.) = 'RETRAIT_MAN_SERV' or (.) = 'ST_CT_NON_DECLAR' or (.) = 'SUPPR_COMP_AVOIR' or (.) = 'TRANSF_PMNT_REGIE' or (.) = 'AUTRE' or (.) = 'COORD_BANC_ERR' or (.) = 'TX_TVA_ERR' or (.) = 'MONTANTTOTAL_ERR' or (.) = 'CALCUL_ERR' or (.) = 'NON_CONFORME' or (.) = 'DOUBLON' or (.) = 'DEST_ERR' or (.) = 'TRANSAC_INC' or (.) = 'EMMET_INC' or (.) = 'CONTRAT_TERM' or (.) = 'DOUBLE_FACT' or (.) = 'CMD_ERR' or (.) = 'ADR_ERR' or (.) = 'REF_CT_ABSENT' or (.) = 'LIVR_INCOMP'))">
                <xsl:attribute name="id">BR-FR-CDV-CL-09_MDT-113_210B2G</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">

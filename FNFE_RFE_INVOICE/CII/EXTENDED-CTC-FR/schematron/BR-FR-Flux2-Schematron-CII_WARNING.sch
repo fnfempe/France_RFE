@@ -6,9 +6,8 @@
     Réalisé par Quentin Houard et Cyrille Sautereau pour le compte du FNFE-MPE.
 
 -->
-<!-- Schematron 20260630_BR-FR-Flux2-Schematron-CII_V1.4.0 - last update 2026 06 30 
-    Mode "WARNING" APPLICABLE EN RECEPTION DES LA PUBLICATION ET JUSQU'AU 30 SEPTEMBRE 2026 AU PLUS TARD.
-                   APPICALBLE EN EMMISSION DES LA PUBLICATION ET JUSQU'AU 31 AOUT 2026 AU PLUS TARD -->
+<!-- Schematron BR-FR-Flux2-Schematron-CII_V1.4.0.04 - last fix04 2026 09 04 
+    Mode "WARNING" APPLICABLE UNIQUEMENT EN RECEPTION DES LA PUBLICATION ET JUSQU'AU 30 SEPTEMBRE 2026 AU PLUS TARD -->
 
 <schema xmlns="http://purl.oclc.org/dsdl/schematron"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -46,9 +45,9 @@
     <xsl:variable name="isFormatValid" select="matches($shortDate, '^20\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$')"/>
     
     <!-- Extraction des composantes -->
-    <xsl:variable name="year" select="number(substring($shortDate, 1, 4))"/>
-    <xsl:variable name="month" select="number(substring($shortDate, 5, 2))"/>
-    <xsl:variable name="day" select="number(substring($shortDate, 7, 2))"/>
+    <xsl:variable name="year" select="xs:decimal(substring($shortDate, 1, 4))"/>
+    <xsl:variable name="month" select="xs:decimal(substring($shortDate, 5, 2))"/>
+    <xsl:variable name="day" select="xs:decimal(substring($shortDate, 7, 2))"/>
     
     <!-- Calcul année bissextile -->
     <xsl:variable name="isLeapYear"
@@ -1121,7 +1120,7 @@
       </assert>
     </rule>
   </pattern>
-  <pattern id="BR-FR-CO-07">
+  <pattern id="BR-FR-CO-07"> <!-- fix04 : correction du test en cas de multiplicité de date d'échéance du fait de multiplicité de PaymentTerms §profil EXTENDED de Factur-X -->
     <title>BR-FR-CO-07 — La date d’échéance (BT-9) doit être postérieure ou égale à la date de facture (BT-2), sauf cas particuliers</title>
     
     <rule context="rsm:CrossIndustryInvoice">
@@ -1130,8 +1129,8 @@
       <let name="typeCode" value="rsm:ExchangedDocument/ram:TypeCode"/>
       <let name="frameworkCode" value="rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID"/> <!-- CYS4 Correction Xpath -->
       
-      <assert test="not(string($dueDate)) or 
-        ($typeCode = ('386', '500', '503') or $frameworkCode = ('B2', 'S2', 'M2') or $dueDate ge $issueDate)"
+      <assert test="not($dueDate[normalize-space(.)]) or 
+        ($typeCode = ('386', '500', '503') or $frameworkCode = ('B2', 'S2', 'M2') or (every $dt in $dueDate satisfies $dt ge $issueDate))"
         flag="warning" id="BR-FR-CO-07_BT-9">
         BR-FR-CO-07/BT-9 : La date d’échéance (BT-9), si présente, doit être postérieure ou égale à la date de facture (BT-2),
         sauf si la facture est de type acompte (386, 500, 503) ou si le cadre de facturation (BT-23) est B2, S2 ou M2.
@@ -1152,7 +1151,7 @@
       </assert>
     </rule>
   </pattern>
-  <pattern id="BR-FR-CO-09"> <!-- CYS3 CORRECTION Xpath BT-113 et Ajouter number(.) pour comparer des montants et nombres -->
+  <pattern id="BR-FR-CO-09"> <!-- CYS3 CORRECTION Xpath BT-113 et Ajouter number(.) pour comparer des montants et nombres - fix04 : remplacer number par xs:decimal + correction test présence DueDate -->
     <title>BR-FR-CO-09 — Contrôle des montants et de la date d’échéance pour les factures déjà payées (BT-23)</title>
     
     <rule context="rsm:CrossIndustryInvoice">
@@ -1163,17 +1162,17 @@
       <let name="dueAmount" value="rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:DuePayableAmount"/>
       <let name="dueDate" value="rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime/udt:DateTimeString"/>
       
-      <assert test="not($isPaidMode) or (number($paidAmount) = number($totalAmount))" flag="warning" id="BR-FR-CO-09_BT-23-1">
+      <assert test="not($isPaidMode) or (xs:decimal($paidAmount) = xs:decimal($totalAmount))" flag="warning" id="BR-FR-CO-09_BT-23-1">
         BR-FR-CO-09/BT-23 : Si le cadre de facturation (BT-23) est B2, S2 ou M2 (facture déjà payée), alors le montant déjà payé (BT-113) doit être égal au montant total TTC (BT-112).
         Montant payé : <value-of select="$paidAmount"/>, Montant total : <value-of select="$totalAmount"/>.
       </assert>
       
-      <assert test="not($isPaidMode) or (number($dueAmount) = 0)" flag="warning" id="BR-FR-CO-09_BT-23-2">
+      <assert test="not($isPaidMode) or (xs:decimal($dueAmount) = 0)" flag="warning" id="BR-FR-CO-09_BT-23-2">
         BR-FR-CO-09/BT-23 : Si le cadre de facturation (BT-23) est B2, S2 ou M2, alors le net à payer (BT-115) doit être égal à 0.
         Net à payer : <value-of select="$dueAmount"/>.
       </assert>
       
-      <assert test="not($isPaidMode) or string($dueDate)" flag="warning" id="BR-FR-CO-09_BT-23-3">
+      <assert test="not($isPaidMode) or $dueDate[normalize-space(.)]" flag="warning" id="BR-FR-CO-09_BT-23-3">
         BR-FR-CO-09/BT-23 : Si le cadre de facturation (BT-23) est B2, S2 ou M2, alors la date d’échéance (BT-9) doit être renseignée et correspondre à la date de paiement.
         Date d’échéance actuelle : <value-of select="$dueDate"/>.
       </assert>
@@ -1704,7 +1703,7 @@
         /ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)"/>
       
       <assert test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) 
-        or (abs(number(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) - $sumsubline) &lt;= 0.01 * $numberline)"
+        or (abs(xs:decimal(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) - $sumsubline) &lt;= 0.01 * $numberline)"
         flag="fatal"
         id="BR-FR-MV-05_EXT-FR-FE-BG-12">
         BR-FR-MV-05/EXT-FR-FE-BG-12 : Ligne GROUP : <value-of select='$grouplineID'/>, Somme Sous lignes : <value-of select='$sumsubline'/>, Nbre sous-lignes: <value-of select='$numberline'/>. Valeur actuelle : "<value-of select='ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount'/>". 
@@ -1780,7 +1779,7 @@
       <let name="invcurrency" value="../ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode"/>
       
       <assert test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) 
-        or (abs(number(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"
+        or (abs(xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"
         flag="fatal"
         id="BR-FR-MV-09_EXT-FR-FE-181">
         BR-FR-MV-09/EXT-FR-FE-181 : Id Line Group : <value-of select='./ram:AssociatedDocumentLineDocument/ram:LineID'/>, Numfact: <value-of select='$numfact'/>, Total TVA : <value-of select='./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]'/>, Somme TVA : <value-of select='$sumvat'/>. 
@@ -1793,26 +1792,27 @@
   <pattern id="BR-FR-MV-10"> <!-- CYS4 revu [ram:AssociatedDocumentLineDocument/ram:ParentLineID = $parentlineID]  and ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL' -->
     <title>BR-FR-MV-10 — Vérification de la cohérence du montant total avec TVA pour une ligne GROUP</title>
     
- <rule context="rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'GROUP'
+    <rule context="rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'GROUP'
       and not(ram:AssociatedDocumentLineDocument/ram:ParentLineID)]">
       
       <let name="invcurrency" value="../ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode"/>
       <let name="parentlineID" value="./ram:AssociatedDocumentLineDocument/ram:LineID"/>
-      <let name="nbligne" value="count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:ParentLineID = $parentlineID and ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'])"/>
+      <let name="nbligne" value="count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:ParentLineID = $parentlineID and ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = ('DETAIL', 'GROUP')])"/>
       
+      <!-- V1.4.0.04 fix04 : correction pour intégrer les lignes GROUP dans le calcul du nb de lignes + xs:decimal() au lieu de number() -->
       <assert test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) 
         or not(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount)
         or (normalize-space(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) != '' 
-        and abs(number(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) 
-        - number(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) 
-        - number(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"      
+        and abs(xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) 
+        - xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) 
+        - xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"      
         flag="fatal"
         id="BR-FR-MV-10_EXT-FR-FE-184">
         BR-FR-MV-10/EXT-FR-FE-184 : Id Line Group : <value-of select='./ram:AssociatedDocumentLineDocument/ram:LineID'/>, nb sous-ligne : <value-of select='$nbligne'/>, 
         TTC : <value-of select='./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount'/>,
         TVA : <value-of select='./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]'/>,
         HT : <value-of select='./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount'/>
-        Lorsque le cadre de facturation (BT-23) est S8, B8, M8 ou S9, B9, M9, si le montant total avec TVA (ram:GrandTotalAmount) est présent pour une ligne GROUP sans parent, alors la différence entre ce montant et la somme du montant HT (ram:LineTotalAmount) et du montant TVA (ram:TaxTotalAmount) doit être inférieure ou égale à 0,01 × le nombre de sous-lignes DETAIL. Valeur actuelle : "<value-of select='.'/>'.
+        Lorsque le cadre de facturation (BT-23) est S8, B8, M8 ou S9, B9, M9, si le montant total avec TVA (ram:GrandTotalAmount) est présent pour une ligne GROUP sans parent, alors la différence entre ce montant et la somme du montant HT (ram:LineTotalAmount) et du montant TVA (ram:TaxTotalAmount) doit être inférieure ou égale à 0,01 × le nombre de sous-lignes DETAIL ou GROUP. Valeur actuelle : "<value-of select='.'/>'.
       </assert>
     </rule> 
   </pattern>

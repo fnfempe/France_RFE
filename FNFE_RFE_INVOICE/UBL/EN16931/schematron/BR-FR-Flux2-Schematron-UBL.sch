@@ -6,8 +6,8 @@
     Réalisé par Quentin Houard et Cyrille Sautereau pour le compte du FNFE-MPE.
 
 -->
-<!-- Schematron 2026-06-30_BR-FR-Flux2-Schematron-UBL_V1.4.0.03 - last update 2026 06 30 - Last fix03 2026 07 31
-  Mode "FATAL" APPLICABLE EN RECEPTION LE 1ER SEPTEMBRE 2026 - APPLICABLE EN EMISSION AU PLUS TARD LE 1ER SEPTEMBRE 2026 -->
+<!-- Schematron BR-FR-Flux2-Schematron-UBL_V1.4.0.04 - last fix04 2026 09 04
+  Mode "FATAL" APPLICABLE EN RECEPTION AU PLUS TARD LE 1ER OCTOBRE 2026 ET EN EMISSION A COMPTER DU 1ER OCTOBRE 2026 -->
 
 <schema xmlns="http://purl.oclc.org/dsdl/schematron"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -43,9 +43,9 @@
     <xsl:variable name="isFormatValid" select="matches($date, '^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$')"/>
     
     <!-- Extraction des composantes -->
-    <xsl:variable name="year" select="number(substring($date, 1, 4))"/>
-    <xsl:variable name="month" select="number(substring($date, 6, 2))"/>
-    <xsl:variable name="day" select="number(substring($date, 9, 2))"/>
+    <xsl:variable name="year" select="xs:decimal(substring($date, 1, 4))"/>
+    <xsl:variable name="month" select="xs:decimal(substring($date, 6, 2))"/>
+    <xsl:variable name="day" select="xs:decimal(substring($date, 9, 2))"/>
     
     <!-- Calcul année bissextile -->
     <xsl:variable name="isLeapYear"
@@ -412,7 +412,7 @@
     <title>BR-FR-05 — Présence obligatoire des mentions légales dans les notes (BG-3)</title>
     
     <rule context="ubl:Invoice | cn:CreditNote">
-      <let name="allNotes" value="string-join(./cbc:Note, '')"/>
+      <let name="allNotes" value="string-join(./cbc:Note, '#')"/>
       <assert test="contains($allNotes, '#PMT#')" flag="fatal" id="BR-FR-05_BT-22-1">
         [BR-FR-05/BT-22] : La mention relative aux frais de recouvrement (code PMT) est absente. Elle est obligatoire dans les notes (BG-3).
       </assert>
@@ -429,7 +429,7 @@
     <title>BR-FR-06 — Unicité des codes sujets dans les notes (BG-3)</title>
     
     <rule context="ubl:Invoice | cn:CreditNote">
-      <let name="allNotes" value="string-join(./cbc:Note, '')"/>
+      <let name="allNotes" value="string-join(./cbc:Note, '#')"/>
       <assert test="count(tokenize($allNotes, '#PMT#')) - 1  le 1" flag="fatal" id="BR-FR-06_BT-21-1">
         [BR-FR-06/BT-21] : Le code sujet PMT (indemnité forfaitaire pour frais de recouvrement) ne doit apparaître qu'une seule fois dans les notes (BG-3).
       </assert>
@@ -448,11 +448,11 @@
   <pattern id="BR-FR-08">
     <title>BR-FR-08 — Validation du mode de facturation (BT-23)</title>
 
-    <!-- BT-23  V1.4 Ajout de l'obligation de présence -->
+    <!-- BT-23  V1.4 Ajout de l'obligation de présence fix04 - xpath du value-of corrigé -->
     <rule context="ubl:Invoice | cn:CreditNote">
       <assert test="custom:is-valid-billing-mode(cbc:ProfileID) and exists(cbc:ProfileID)" flag="fatal" id="BR-FR-08_BT-23">
         [BR-FR-08/BT-23] : La valeur du cadre de facturation (ram:ID) est absente ou n’est pas autorisée. Valeurs acceptées : B1, S1, M1, B2, S2, M2, S3, B4, S4, M4, S5, S6, B7, S7, B8, S8, M8, B9, S9, M9.
-        Valeur actuelle : "<value-of select='.'/>".
+        Valeur actuelle : "<value-of select='cbc:ProfileID'/>".
         Veuillez utiliser une valeur conforme à la liste des modes de facturation autorisés.
       </assert>
     </rule>
@@ -565,16 +565,17 @@
   
   <pattern id="BR-FR-11"> 
     <title>BR-FR-11 — SIREN obligatoire et valide si traitement BAR/B2B (BT-47)</title>
-    
+
+    <!-- V1.4.0 fix04 add '#' in join in order to manage notes without subject between #-->
     <rule context="ubl:Invoice | cn:CreditNote">
-      <let name="allNotes" value="string-join(./cbc:Note, '')[contains(., '#BAR#')]"/>
+      <let name="allNotes" value="string-join(./cbc:Note, '#')"/>
       <let name="afterBar" value="substring-after($allNotes, '#BAR#')"/>
       <let name="barTreatment" value="if (contains($afterBar, '#')) then substring-before($afterBar, '#') else $afterBar"/> 
       <let name="siren" value="cac:AccountingCustomerParty/cac:Party/cac:PartyLegalEntity/cbc:CompanyID[@schemeID='0002']"/>
-      
+     
       <assert test="not($barTreatment='B2B') or ($siren and matches(normalize-space($siren), '^\d{9}$'))" flag="fatal" id="BR-FR-11_BT-47">
         [BR-FR-11/BT-47] : Si une note contient le code sujet BAR avec la valeur 'B2B', alors le SIREN de l’acheteur (cbc:ID[@schemeID='0002']) est obligatoire et doit être composé exactement de 9 chiffres.
-        Valeur actuelle : "<value-of select="$siren"/>". Veuillez renseigner un identifiant SIREN valide.
+        BARvalue : <value-of select="$barTreatment"/>, Valeur actuelle SIREN : "<value-of select="$siren"/>". Veuillez renseigner un identifiant SIREN valide.
       </assert>
     </rule>
   </pattern>
@@ -699,9 +700,9 @@
   </pattern>
   <pattern id="BR-FR-20">
     <title>BR-FR-20 — Vérification du traitement associé à une note avec code sujet "BAR" (BT-21)</title>
-    <!-- V1.4.0 fix : ajout de la valeur B2CINT -->
+    <!-- V1.4.0 fix : ajout de la valeur B2CINT - fix04 add '#' in join in order to manage notes without subject between #-->
     <rule context="ubl:Invoice | cn:CreditNote">
-      <let name="allNotes" value="string-join(./cbc:Note, '')[contains(., '#BAR#')]"/>
+      <let name="allNotes" value="string-join(./cbc:Note, '#')"/>
       <let name="afterBar" value="substring-after($allNotes, '#BAR#')"/>
       <let name="barTreatment" value="if (contains($afterBar, '#')) then substring-before($afterBar, '#') else $afterBar"/>    
       <let name="invalidNotes" value="$barTreatment != '' and $barTreatment != 'B2B' and $barTreatment != 'B2BINT' and $barTreatment != 'B2C' and $barTreatment != 'B2CINT' and $barTreatment != 'OUTOFSCOPE' and $barTreatment != 'ARCHIVEONLY'"/>
@@ -714,9 +715,9 @@
   </pattern>
   <pattern id="BR-FR-21">
     <title>BR-FR-21 — Vérification du BT-49 en cas de traitement BAR/B2B et hors cas autofacture</title>
-    
+    <!-- V1.4.0 fix04 add '#' in join in order to manage notes without subject between #-->
     <rule context="ubl:Invoice | cn:CreditNote">
-      <let name="allNotes" value="string-join(./cbc:Note, '')[contains(., '#BAR#')]"/>
+      <let name="allNotes" value="string-join(./cbc:Note, '#')"/>
       <let name="afterBar" value="substring-after($allNotes, '#BAR#')"/>
       <let name="treatment" value="if (contains($afterBar, '#')) then substring-before($afterBar, '#') else $afterBar"/>   
       <let name="typeCode" value="cbc:InvoiceTypeCode | cbc:CreditNoteTypeCode"/>
@@ -734,7 +735,8 @@
     <title>BR-FR-22 — Vérification du BT-34 en cas de traitement BAR/B2B et en autofacture</title>
     
     <rule context="ubl:Invoice | cn:CreditNote">
-      <let name="allNotes" value="string-join(./cbc:Note, '')[contains(., '#BAR#')]"/>
+      <!-- V1.4.0 fix04 add '#' in join in order to manage notes without subject between #-->
+      <let name="allNotes" value="string-join(./cbc:Note, '#')"/>
       <let name="afterBar" value="substring-after($allNotes, '#BAR#')"/>
       <let name="treatment" value="if (contains($afterBar, '#')) then substring-before($afterBar, '#') else $afterBar"/>   
       <let name="typeCode" value="cbc:InvoiceTypeCode | cbc:CreditNoteTypeCode"/>
@@ -742,7 +744,8 @@
       <let name="endpointID" value="cac:AccountingSupplierParty/cac:Party/cbc:EndpointID"/>
       <let name="schemeID" value="cac:AccountingSupplierParty/cac:Party/cbc:EndpointID/@schemeID"/>
       
-      <assert test="not($treatment) or not($typeCode = ('389', '501', '500', '471', '473', '261', '502')) or 
+      <!-- V1.4.0 fix04 : correction not($treatment='B2B') -->
+      <assert test="not($treatment='B2B') or not($typeCode = ('389', '501', '500', '471', '473', '261', '502')) or 
         (starts-with($endpointID, $siren) and $schemeID = '0225')" flag="fatal" id="BR-FR-22_BT-34">
         [BR-FR-22/BT-34] : Si le traitement est BAR/B2B et que le type de document (cbc:InvoiceTypeCode) est en autofacture (389, 501, 500, 471, 473, 261, 502), alors le BT-34 (cbc:EndpointID du vendeur) doit commencer par le SIREN (cbc:ID[@schemeID='0002']) et le schemeID doit être égal à "0225".
         Valeurs actuelles : EndpointID="<value-of select='$endpointID'/>", schemeID="<value-of select='$schemeID'/>", SIREN="<value-of select='$siren'/>".
@@ -1140,7 +1143,7 @@
       <let name="typeCode" value="cbc:InvoiceTypeCode | cbc:CreditNoteTypeCode"/>
       <let name="billingContext" value="cbc:ProfileID"/> <!-- CYS4 Correction Xpath, was cac:PaymentTerms/cbc:Note -->
       <let name="issueDate" value="cbc:IssueDate"/>
-      <let name="dueDate" value="cbc:DueDate"/>
+      <let name="dueDate" value="cbc:DueDate | cac:PaymentMeans/cbc:PaymentDueDate"/> <!-- V1.4.0.04 fix04 Correction Xpath for UBL Credit Note) -->
       
       <assert test="not($dueDate and not($typeCode = '386' or $typeCode = '500' or $typeCode = '503' or $billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') and $dueDate &lt; $issueDate)"
         flag="fatal" id="BR-FR-CO-07_BT-9">
@@ -1164,7 +1167,7 @@
       </assert>
     </rule>
   </pattern>
-  <pattern id="BR-FR-CO-09"> <!-- CYS3 CORRECTION Xpath BT-113 et Ajouter number(.) pour comparer des montants et nombres -->
+  <pattern id="BR-FR-CO-09"> <!-- CYS3 CORRECTION Xpath BT-113 et Ajouter number(.) pour comparer des montants et nombres fix04 remplacer number par xs:decimal-->
     <title>BR-FR-CO-09 — Contrôle des montants et de la date d’échéance pour les factures déjà payées (BT-23)</title>
     
     <rule context="ubl:Invoice | cn:CreditNote">
@@ -1174,13 +1177,13 @@
       <let name="payableAmount" value="cac:LegalMonetaryTotal/cbc:PayableAmount"/>
       <let name="dueDate" value="cbc:DueDate | cac:PaymentMeans/cbc:PaymentDueDate"/> <!-- V1.4.0 Correction Xpath for UBL Credit Note) -->
       
-      <assert test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (number($paidAmount) = number($grandTotal))"
+      <assert test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($paidAmount) = xs:decimal($grandTotal))"
         flag="fatal" id="BR-FR-CO-09_BT-23-1">
         [BR-FR-CO-09/BT-23] : Si le cadre de facturation (BT-23) est B2, S2 ou M2 (facture déjà payée), alors le montant déjà payé (BT-113) doit être égal au montant total TTC (BT-112).
         Montant payé : <value-of select="$paidAmount"/>, Montant total : <value-of select="$grandTotal"/>.
       </assert>
       
-      <assert test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (number($payableAmount) = 0)"
+      <assert test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($payableAmount) = 0)"
         flag="fatal" id="BR-FR-CO-09_BT-23-2">
         [BR-FR-CO-09/BT-23] : Si le cadre de facturation (BT-23) est B2, S2 ou M2, alors le net à payer (BT-115) doit être égal à 0.
         Net à payer : <value-of select="$payableAmount"/>.
@@ -1344,8 +1347,9 @@
     <title>BR-FR-CO-14 — Vérification de la note TXD pour les vendeurs membres d’un assujetti unique</title>
     
     <rule context="ubl:Invoice | cn:CreditNote">
+      <!-- V1.4.0 fix04 add '#' in join in order to manage notes without subject between #-->
       <let name="isAU" value="exists(cac:AccountingSupplierParty/cac:Party/cac:PartyIdentification/cbc:ID[@schemeID = '0231'])"/>
-      <let name="allNotes" value="string-join(./cbc:Note, '')[contains(., '#TXD#')]"/>
+      <let name="allNotes" value="string-join(./cbc:Note, '#')"/>
       <let name="afterTXD" value="substring-after($allNotes, '#TXD#')"/>
       <let name="ValeurTXD" value="if (contains($afterTXD, '#')) then substring-before($afterTXD, '#') else $afterTXD"/>   
       
@@ -1771,7 +1775,7 @@
       <let name="numberline" value="count((../../cac:InvoiceLine| ../../cac:CreditNoteLine)[cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID  and cac:InvoiceDocumentReference/cbc:DocumentStatusCode != 'INFORMATION' and cac:BillingReferenceLine/cbc:ID = $grouplineID]]/cbc:LineExtensionAmount)"/>
       
       <assert test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) 
-        or (abs(number(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)"
+        or (abs(xs:decimal(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)"
         flag="fatal"
         id="BR-FR-MV-05_EXT-FR-FE-BG-12">
         [BR-FR-MV-05/EXT-FR-FE-BG-12] : Num Fact : <value-of select='$invoiceID'/> - Ligne GROUP : <value-of select='$grouplineID'/>, Somme Sous lignes : <value-of select='$sumsubline'/>, Nbre sous-lignes: <value-of select='$numberline'/>. Valeur actuelle : "<value-of select='../cbc:LineExtensionAmount'/>".
@@ -1849,7 +1853,7 @@
       <let name="invcurrency" value="../../cbc:DocumentCurrencyCode"/>
       
       <assert test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) 
-        or (abs(number(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"
+        or (abs(xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"
         flag="fatal"
         id="BR-FR-MV-09_EXT-FR-FE-181">
         [BR-FR-MV-09/EXT-FR-FE-181] : Id Line Group : <value-of select='../cbc:ID'/>, Numfact: <value-of select='$numfact'/>, Total TVA : <value-of select='../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]'/>, Somme TVA : <value-of select='$sumvat'/>.
@@ -1866,21 +1870,22 @@
       
       <let name="invcurrency" value="../../cbc:DocumentCurrencyCode"/>
       <let name="parentlineID" value="../cbc:ID"/>
-      <let name="nbligne" value="count((../../cac:InvoiceLine| ../../cac:CreditNoteLine)/cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID][cac:InvoiceDocumentReference/cbc:DocumentStatusCode = 'DETAIL' and cac:BillingReferenceLine/cbc:ID = $parentlineID])"/>
+      <let name="nbligne" value="count((../../cac:InvoiceLine| ../../cac:CreditNoteLine)/cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID][cac:InvoiceDocumentReference/cbc:DocumentStatusCode = ('DETAIL', 'GROUP') and cac:BillingReferenceLine/cbc:ID = $parentlineID])"/>
       
+      <!-- V1.4.0.04 fix04 : correction pour intégrer les lignes GROUP dans le calcul du nb de lignes -->
       <assert test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) 
         or not(../cbc:TaxInclusiveLineExtensionAmount) 
         or (normalize-space(../cbc:TaxInclusiveLineExtensionAmount) != '' 
-        and abs(number(../cbc:TaxInclusiveLineExtensionAmount) 
-        - number(../cbc:LineExtensionAmount) 
-        - number(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"      
+        and abs(xs:decimal(../cbc:TaxInclusiveLineExtensionAmount) 
+        - xs:decimal(../cbc:LineExtensionAmount) 
+        - xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"      
         flag="fatal"
         id="BR-FR-MV-10_EXT-FR-FE-184">
         [BR-FR-MV-10/EXT-FR-FE-184] : Id Line Group : <value-of select='../cbc:ID'/>, nb sous-ligne : <value-of select='$nbligne'/>, 
         TTC : <value-of select='../cbc:TaxInclusiveLineExtensionAmount'/>,
         TVA : <value-of select='../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]'/>,
         HT : <value-of select='../cbc:LineExtensionAmount'/>
-        Lorsque le cadre de facturation (BT-23) est S8, B8, M8 ou S9, B9, M9, si le montant total avec TVA (EXT-FR-FE-184) est présent pour une ligne GROUP sans parent, alors la différence entre ce montant et la somme du montant HT (BT-131) et du montant TVA (EXT-FR-FE-181) doit être inférieure ou égale à 0,01 × le nombre de sous-lignes DETAIL. Valeur actuelle : "<value-of select='.'/>'.
+        Lorsque le cadre de facturation (BT-23) est S8, B8, M8 ou S9, B9, M9, si le montant total avec TVA (EXT-FR-FE-184) est présent pour une ligne GROUP sans parent, alors la différence entre ce montant et la somme du montant HT (BT-131) et du montant TVA (EXT-FR-FE-181) doit être inférieure ou égale à 0,01 × le nombre de sous-lignes DETAIL ou GROUP. Valeur actuelle : "<value-of select='.'/>'.
       </assert>
     </rule>
   </pattern>

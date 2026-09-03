@@ -5,7 +5,8 @@
     Réalisé par Quentin Houard et Cyrille Sautereau pour le compte du FNFE-MPE.
 
 -->
-<!-- Schematron 20260630_EXTENDED-CTC-FR-CII-V1.4.0.03 - based on Schematron EN16931 version 1.3.16 - Last update: 2026-06-30 - Last fix 2026 07 31 -->
+<!-- Schematron EXTENDED-CTC-FR-UBL-V1.4.0.04 - based on Schematron EN16931 version 1.3.16 - Last update: 2026-06-30 - Last fix04 2026 09 04
+                            APPLICABLE EN RECEPTION AU PLUS TARD LE 1ER OCTOBRE 2026 ET EN EMISSION A COMPTER DU 1ER OCTOBRE 2026-->
 
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
   <title>EN16931  model bound to UBL</title>
