@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ccts="urn:un:unece:uncefact:documentation:2"
+    xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2"
+    xmlns:udt="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2">
+    <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+     <cbc:CustomizationID>urn:cen.eu:en16931:2017</cbc:CustomizationID>  <!-- BT-24 (Identification de spécification) : urn:cen.eu:en16931:2017 -->
+     <cbc:ProfileID>S1</cbc:ProfileID>  <!-- BT-23 (Identifiant de type de processus métier) : S1 -->
+     <cbc:ID>F202500003</cbc:ID>  <!-- BT-1 (Numéro de facture) : F202500003 -->
+     <cbc:IssueDate>2025-07-01</cbc:IssueDate>  <!-- BT-2 (Date d'émission de la facture) : 2025-07-01 -->
+     <cbc:DueDate>2025-07-31</cbc:DueDate>  <!-- BT-9 (Date d'échéance) : 2025-07-31 -->
+     <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>  <!-- BT-3 (Type de facture en code) : 380 -->
+     <cbc:Note>#REG#VENDEUR SARL au capital de 50 000 EUR</cbc:Note>  <!-- BT-22 (Note de facture) : VENDEUR SARL au capital de 50 000 EUR -->
+     <cbc:Note>#ABL#RCS MAVILLE 100 000 009</cbc:Note>  <!-- BT-22 (Note de facture) : RCS MAVILLE 100 000 009 -->
+     <cbc:Note>#AAI#35 ma rue a moi,75018 PARIS, FR – contact@vendeur.fr - www.levendeur.fr  – N° TVA : FR88 100 000 009</cbc:Note>  <!-- BT-22 (Note de facture) : 35 ma rue a moi,75018 PARIS, FR – contact@vendeur.fr - www.levendeur.fr  – N° TVA : FR88 100 000 009 -->
+     <cbc:Note>#PMD#Tout retard de paiement engendre une pénalité exigible à compter de la date d'échéance, calculée sur la base de trois fois le taux d'intérêt légal. </cbc:Note>  <!-- BT-22 (Note de facture) : Tout retard de paiement engendre une pénalité exigible à compter de la date d'échéance, calculée sur la base de trois fois le taux d'intérêt légal.  -->
+     <cbc:Note>#PMT#Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : 40 €.</cbc:Note>  <!-- BT-22 (Note de facture) : Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : 40 €. -->
+     <cbc:Note>#AAB#Les réglements reçus avant la date d'échéance ne donneront pas lieu à escompte.</cbc:Note>  <!-- BT-22 (Note de facture) : Les réglements reçus avant la date d'échéance ne donneront pas lieu à escompte. -->
+     <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>  <!-- BT-5 (Code de devise de facturation) : EUR -->
+     <cbc:AccountingCost>REF COMPTABLE ACHETEUR</cbc:AccountingCost>  <!-- BT-19 (Référence comptable de l'acheteur) : REF COMPTABLE ACHETEUR -->
+     <cbc:BuyerReference>BU_2516</cbc:BuyerReference>  <!-- BT-10 (Référence de l’acheteur) : BU_2516 -->
+     <cac:InvoicePeriod>
+          <cbc:StartDate>2025-06-01</cbc:StartDate>  <!-- BT-73 (Date de début de période de facturation) : 2025-06-01 -->
+          <cbc:EndDate>2025-06-30</cbc:EndDate>  <!-- BT-74 (Date de fin de période de facturation) : 2025-06-30 -->
+          <cbc:DescriptionCode>432</cbc:DescriptionCode>  <!-- BT-8 (Date d'exigibilité de la taxe sur la valeur ajoutée en code) : 432 -->
+     </cac:InvoicePeriod>
+     <cac:OrderReference>
+          <cbc:ID>PO202525478</cbc:ID>  <!-- BT-13 (Identifiant de bon de commande) : PO202525478 -->
+          <cbc:SalesOrderID>SO20255874</cbc:SalesOrderID>  <!-- BT-14 (Identifiant d'un bon de commande de vente) : SO20255874 -->
+     </cac:OrderReference>
+     <cac:AdditionalDocumentReference>
+          <cbc:ID schemeID="IT">REF_CLIENT2514</cbc:ID>  <!-- BT-18 (Identifiant d'objet facturé) : REF_CLIENT2514 -->
+          <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+     </cac:AdditionalDocumentReference>
+     <cac:AccountingSupplierParty>
+          <cac:Party>
+               <cbc:EndpointID schemeID="0225">100000009_STATUTS</cbc:EndpointID>  <!-- BT-34 (Adresse électronique du vendeur ) : 100000009_STATUTS -->
+               <cac:PartyIdentification>
+                    <cbc:ID schemeID="0088">587451236587</cbc:ID>  <!-- BT-29-0 (Identifiant du vendeur (Global ID)) : 587451236587 -->
+               </cac:PartyIdentification>
+               <cac:PartyName>
+                    <cbc:Name>VENDEUR NOM COMMERCIAL</cbc:Name>  <!-- BT-28 (Appellation commerciale du vendeur) : VENDEUR NOM COMMERCIAL -->
+               </cac:PartyName>
+               <cac:PostalAddress>
+                    <cbc:StreetName>35 rue d'ici</cbc:StreetName>  <!-- BT-35 (Adresse du vendeur - Ligne 1) : 35 rue d'ici -->
+                    <cbc:AdditionalStreetName>ligne 2 vendeur</cbc:AdditionalStreetName>  <!-- BT-36 (Adresse du vendeur - Ligne 2) : ligne 2 vendeur -->
+                    <cbc:CityName>PARIS</cbc:CityName>  <!-- BT-37 (Localité du vendeur) : PARIS -->
+                    <cbc:PostalZone>75018</cbc:PostalZone>  <!-- BT-38 (Code postal du vendeur) : 75018 -->
+                    <cac:Country>
+                         <cbc:IdentificationCode>FR</cbc:IdentificationCode>  <!-- BT-40 (Code de pays du vendeur) : FR -->
+                    </cac:Country>
+               </cac:PostalAddress>
+               <cac:PartyTaxScheme>
+                    <cbc:CompanyID>FR88100000009</cbc:CompanyID>  <!-- BT-31 (Identifiant à la TVA du vendeur) : FR88100000009 -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-31-0 (#NA) : VAT -->
+                    </cac:TaxScheme>
+               </cac:PartyTaxScheme>
+               <cac:PartyLegalEntity>
+                    <cbc:RegistrationName>LE VENDEUR</cbc:RegistrationName>  <!-- BT-27 (Raison sociale du vendeur) : LE VENDEUR -->
+                    <cbc:CompanyID schemeID="0002">100000009</cbc:CompanyID>  <!-- BT-30 (Identifiant d’enregistrement légal du vendeur) : 100000009 -->
+                    <cbc:CompanyLegalForm>SARL AU CAPITAL DE 50 000 EUROS</cbc:CompanyLegalForm>  <!-- BT-33 (Informations juridiques additionnelles sur le vendeur) : SARL AU CAPITAL DE 50 000 EUROS -->
+               </cac:PartyLegalEntity>
+               <cac:Contact>
+                    <cbc:Telephone>01 02 03 54 87</cbc:Telephone>  <!-- BT-42 (Numéro de téléphone du contact vendeur) : 01 02 03 54 87 -->
+                    <cbc:ElectronicMail>contact@vendeur.fr</cbc:ElectronicMail>  <!-- BT-43 (Adresse électronique du contact vendeur) : contact@vendeur.fr -->
+               </cac:Contact>
+          </cac:Party>
+     </cac:AccountingSupplierParty>
+     <cac:AccountingCustomerParty>
+          <cac:Party>
+               <cbc:EndpointID schemeID="0225">200000008</cbc:EndpointID>  <!-- BT-49 (Adresse électronique de l'acheteur) : 200000008 -->
+               <cac:PartyIdentification>
+                    <cbc:ID schemeID="0088">3654789851</cbc:ID>  <!-- BT-46-0 (Identifiant de l'acheteur (GlobalID)) : 3654789851 -->
+               </cac:PartyIdentification>
+               <cac:PostalAddress>
+                    <cbc:StreetName>55 avenue de là-bas</cbc:StreetName>  <!-- BT-50 (Adresse de l'acheteur - Ligne 1) : 55 avenue de là-bas -->
+                    <cbc:AdditionalStreetName>acheteur ligne 2</cbc:AdditionalStreetName>  <!-- BT-51 (Adresse de l'acheteur - Ligne 2) : acheteur ligne 2 -->
+                    <cbc:CityName>MA VILLE</cbc:CityName>  <!-- BT-52 (Localité de l'acheteur) : MA VILLE -->
+                    <cbc:PostalZone>06000</cbc:PostalZone>  <!-- BT-53 (Code postal de l'acheteur) : 06000 -->
+                    <cac:Country>
+                         <cbc:IdentificationCode>FR</cbc:IdentificationCode>  <!-- BT-55 (Code de pays de l'acheteur) : FR -->
+                    </cac:Country>
+               </cac:PostalAddress>
+               <cac:PartyTaxScheme>
+                    <cbc:CompanyID >FR37200000008</cbc:CompanyID>  <!-- BT-48 (Identifiant à la TVA de l'acheteur) : FR37200000008 -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-48-0 (#NA) : VAT -->
+                    </cac:TaxScheme>
+               </cac:PartyTaxScheme>
+               <cac:PartyLegalEntity>
+                    <cbc:RegistrationName>LE CLIENT</cbc:RegistrationName>  <!-- BT-44 (Raison sociale de l'acheteur) : LE CLIENT -->
+                    <cbc:CompanyID schemeID="0002">200000008</cbc:CompanyID>  <!-- BT-47 (Identifiant d’enregistrement  légal de l'acheteur) : 200000008 -->
+               </cac:PartyLegalEntity>
+               <cac:Contact>
+                    <cbc:Telephone>01 01 25 45 87</cbc:Telephone>  <!-- BT-57 (Numéro de téléphone du contact acheteur) : 01 01 25 45 87 -->
+                    <cbc:ElectronicMail>contact@acheteur.fr</cbc:ElectronicMail>  <!-- BT-58 (Adresse électronique du contact acheteur) : contact@acheteur.fr -->
+               </cac:Contact>
+          </cac:Party>
+     </cac:AccountingCustomerParty>
+     <cac:Delivery>
+          <cac:DeliveryLocation>
+               <cac:Address>
+                    <cbc:StreetName>12 impasse plus loin</cbc:StreetName>  <!-- BT-75 (Adresse de livraison - Ligne 1) : 12 impasse plus loin -->
+                    <cbc:AdditionalStreetName>livré à ligne 2</cbc:AdditionalStreetName>  <!-- BT-76 (Adresse de livraison - Ligne 2) : livré à ligne 2 -->
+                    <cbc:CityName>MA VILLE</cbc:CityName>  <!-- BT-77 (Localité de livraison) : MA VILLE -->
+                    <cbc:PostalZone>06000</cbc:PostalZone>  <!-- BT-78 (Code postal de livraison) : 06000 -->
+                    <cac:Country>
+                         <cbc:IdentificationCode>FR</cbc:IdentificationCode>  <!-- BT-80 (Code du pays de livraison) : FR -->
+                    </cac:Country>
+               </cac:Address>
+          </cac:DeliveryLocation>
+          <cac:DeliveryParty>
+               <cac:PartyName>
+                    <cbc:Name>NOUS AUSSI</cbc:Name>  <!-- BT-70 (Nom de l’intervenant à livrer) : NOUS AUSSI -->
+               </cac:PartyName>
+          </cac:DeliveryParty>
+     </cac:Delivery>
+     <cac:PaymentMeans>
+          <cbc:PaymentMeansCode name="Virement">30</cbc:PaymentMeansCode>  <!-- BT-81 (Code de type de moyen de paiement) : 30 -->
+          <cbc:PaymentID>F202500003_200000008</cbc:PaymentID>  <!-- BT-83 (Référence End to End de paiement) : F202500003_200000008 -->
+          <cac:PayeeFinancialAccount>
+               <cbc:ID>FR20 1254 2547 2569 8542 5874 698</cbc:ID>  <!-- BT-84 (Identifiant (IBAN) du compte bancaire du bénéficiaire) : FR20 1254 2547 2569 8542 5874 698 -->
+               <cbc:Name>MON COMPTE BANCAIRE</cbc:Name>  <!-- BT-85 (Nom du compte bancaire du bénéficiaire) : MON COMPTE BANCAIRE -->
+               <cac:FinancialInstitutionBranch>
+                    <cbc:ID>BIC_MONCOMPTE</cbc:ID>  <!-- BT-86 (Identifiant d'établissement financier du compte bénéficiaire) : BIC_MONCOMPTE -->
+               </cac:FinancialInstitutionBranch>
+          </cac:PayeeFinancialAccount>
+     </cac:PaymentMeans>
+     <cac:PaymentTerms>
+          <cbc:Note>PAIEMENT 30 JOURS NET</cbc:Note>  <!-- BT-20 (Conditions de paiement) : PAIEMENT 30 JOURS NET -->
+     </cac:PaymentTerms>
+     <cac:TaxTotal>
+          <cbc:TaxAmount currencyID="EUR">2000.00</cbc:TaxAmount>  <!-- BT-110 (Montant total de TVA) : 2000.00 -->
+          <cac:TaxSubtotal>
+               <cbc:TaxableAmount currencyID="EUR">10000.00</cbc:TaxableAmount>  <!-- BT-116 (Base d'imposition du type de TVA) : 10000.00 -->
+               <cbc:TaxAmount currencyID="EUR">2000.00</cbc:TaxAmount>  <!-- BT-117 (Montant de la taxe pour le type de TVA) : 2000.00 -->
+               <cac:TaxCategory>
+                    <cbc:ID>S</cbc:ID>  <!-- BT-118 (Code de type de TVA) : S -->
+                    <cbc:Percent>20.00</cbc:Percent>  <!-- BT-119 (Taux de type de TVA) : 20.00 -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!--  () : VAT -->
+                    </cac:TaxScheme>
+               </cac:TaxCategory>
+          </cac:TaxSubtotal>
+     </cac:TaxTotal>
+     <cac:LegalMonetaryTotal>
+          <cbc:LineExtensionAmount currencyID="EUR">10000.00</cbc:LineExtensionAmount>  <!-- BT-106 (Somme du montant net des lignes de facture) : 10000.00 -->
+          <cbc:TaxExclusiveAmount currencyID="EUR">10000.00</cbc:TaxExclusiveAmount>  <!-- BT-109 (Montant total de la facture hors TVA) : 10000.00 -->
+          <cbc:TaxInclusiveAmount currencyID="EUR">12000.00</cbc:TaxInclusiveAmount>  <!-- BT-112 (Montant total de la facture avec TVA comprise) : 12000.00 -->
+          <cbc:AllowanceTotalAmount currencyID="EUR">0.00</cbc:AllowanceTotalAmount>  <!-- BT-107 (Somme des remises au niveau du document) : 0.00 -->
+          <cbc:ChargeTotalAmount currencyID="EUR">0.00</cbc:ChargeTotalAmount>  <!-- BT-108 (Somme des charges ou frais au niveau du document) : 0.00 -->
+          <cbc:PrepaidAmount currencyID="EUR">0.00</cbc:PrepaidAmount>  <!-- BT-113 (Montant payé) : 0.00 -->
+          <cbc:PayableAmount  currencyID="EUR">12000.00</cbc:PayableAmount>  <!-- BT-115 (Montant à payer) : 12000.00 -->
+     </cac:LegalMonetaryTotal>
+     <cac:InvoiceLine>
+          <cbc:ID>1</cbc:ID>  <!-- BT-126 (Identifiant de ligne de facture) : 1 -->
+          <cbc:InvoicedQuantity unitCode="HUR">200.0000</cbc:InvoicedQuantity>  <!-- BT-129 (Quantité facturée) : 200.0000 -->
+          <cbc:LineExtensionAmount currencyID="EUR">8000.00</cbc:LineExtensionAmount>  <!-- BT-131 (Montant net de ligne de facture) : 8000.00 -->
+          <cac:Item>
+               <cbc:Description>Description</cbc:Description>  <!-- BT-154 (Description de l'article) : Description -->
+               <cbc:Name>SERVICE_FOURNI1</cbc:Name>  <!-- BT-153 (Nom de l'article) : SERVICE_FOURNI1 -->
+               <cac:ClassifiedTaxCategory>
+                    <cbc:ID>S</cbc:ID>  <!-- BT-151 (Code de type de TVA de l'article facturé) : S -->
+                    <cbc:Percent>20.00</cbc:Percent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 20.00 -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                    </cac:TaxScheme>
+               </cac:ClassifiedTaxCategory>
+          </cac:Item>
+          <cac:Price>
+               <cbc:PriceAmount currencyID="EUR">40.0000</cbc:PriceAmount>  <!-- BT-146 (Prix net de l'article) : 40.0000 -->
+               <cbc:BaseQuantity unitCode="HUR">1.0000</cbc:BaseQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+               <cac:AllowanceCharge>
+                    <cbc:ChargeIndicator>false</cbc:ChargeIndicator>  <!--  () : false -->
+                    <cbc:Amount currencyID="EUR">0.0000</cbc:Amount>  <!-- BT-147 (Rabais sur le prix de l'article) : 0.0000 -->
+                    <cbc:BaseAmount  currencyID="EUR">40.0000</cbc:BaseAmount>  <!-- BT-148 (Prix brut de l'article) : 40.0000 -->
+               </cac:AllowanceCharge>
+          </cac:Price>
+     </cac:InvoiceLine>
+     <cac:InvoiceLine>
+          <cbc:ID>2</cbc:ID>  <!-- BT-126 (Identifiant de ligne de facture) : 2 -->
+          <cbc:InvoicedQuantity unitCode="DAY">5.0000</cbc:InvoicedQuantity>  <!-- BT-129 (Quantité facturée) : 5.0000 -->
+          <cbc:LineExtensionAmount currencyID="EUR">2000.00</cbc:LineExtensionAmount>  <!-- BT-131 (Montant net de ligne de facture) : 2000.00 -->
+          <cac:Item>
+               <cbc:Description>Description</cbc:Description>  <!-- BT-154 (Description de l'article) : Description -->
+               <cbc:Name>SERVICE_FOURNI2</cbc:Name>  <!-- BT-153 (Nom de l'article) : SERVICE_FOURNI2 -->
+               <cac:ClassifiedTaxCategory>
+                    <cbc:ID>S</cbc:ID>  <!-- BT-151 (Code de type de TVA de l'article facturé) : S -->
+                    <cbc:Percent>20.00</cbc:Percent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 20.00 -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                    </cac:TaxScheme>
+               </cac:ClassifiedTaxCategory>
+          </cac:Item>
+          <cac:Price>
+               <cbc:PriceAmount currencyID="EUR">400.0000</cbc:PriceAmount>  <!-- BT-146 (Prix net de l'article) : 400.0000 -->
+               <cbc:BaseQuantity unitCode="DAY">1.0000</cbc:BaseQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+               <cac:AllowanceCharge>
+                    <cbc:ChargeIndicator>false</cbc:ChargeIndicator>  <!--  () : false -->
+                    <cbc:Amount currencyID="EUR">0.0000</cbc:Amount>  <!-- BT-147 (Rabais sur le prix de l'article) : 0.0000 -->
+                    <cbc:BaseAmount  currencyID="EUR">400.0000</cbc:BaseAmount>  <!-- BT-148 (Prix brut de l'article) : 400.0000 -->
+               </cac:AllowanceCharge>
+          </cac:Price>
+     </cac:InvoiceLine>
+</Invoice>

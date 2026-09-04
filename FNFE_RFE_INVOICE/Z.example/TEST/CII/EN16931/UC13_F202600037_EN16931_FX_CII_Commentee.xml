@@ -1,0 +1,355 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rsm:CrossIndustryInvoice xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"
+xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
+xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+     <rsm:ExchangedDocumentContext>
+          <ram:BusinessProcessSpecifiedDocumentContextParameter>
+               <ram:ID>B1</ram:ID>  <!-- BT-23 (Identifiant de type de processus métier) : B1 -->
+          </ram:BusinessProcessSpecifiedDocumentContextParameter>
+          <ram:GuidelineSpecifiedDocumentContextParameter>
+               <ram:ID>urn:cen.eu:en16931:2017</ram:ID>  <!-- BT-24 (Identification de spécification) : urn:cen.eu:en16931:2017 -->
+          </ram:GuidelineSpecifiedDocumentContextParameter>
+     </rsm:ExchangedDocumentContext>
+     <rsm:ExchangedDocument>
+          <ram:ID>F202600037</ram:ID>  <!-- BT-1 (Numéro de facture) : F202600037 -->
+          <ram:TypeCode>380</ram:TypeCode>  <!-- BT-3 (Type de facture en code) : 380 -->
+          <ram:IssueDateTime>
+               <udt:DateTimeString format="102">20260602</udt:DateTimeString>  <!-- BT-2 (Date d'émission de la facture) : 20260602 -->
+          </ram:IssueDateTime>
+          <ram:IncludedNote>
+               <ram:Content>COMPENSATION AVEC AUTOFACTURE AUTOF202600028</ram:Content>  <!-- BT-22 (Note de facture) : COMPENSATION AVEC AUTOFACTURE AUTOF202600028 -->
+               <ram:SubjectCode>PAI</ram:SubjectCode>  <!-- BT-21 (Sujet de la note de facture en code) : PAI -->
+          </ram:IncludedNote>
+          <ram:IncludedNote>
+               <ram:Content>COOP1 SARL au capital de 100 000 EUR</ram:Content>  <!-- BT-22 (Note de facture) : COOP1 SARL au capital de 100 000 EUR -->
+               <ram:SubjectCode>REG</ram:SubjectCode>  <!-- BT-21 (Sujet de la note de facture en code) : REG -->
+          </ram:IncludedNote>
+          <ram:IncludedNote>
+               <ram:Content>RCS MAVILLE 200 000 008</ram:Content>  <!-- BT-22 (Note de facture) : RCS MAVILLE 200 000 008 -->
+               <ram:SubjectCode>ABL</ram:SubjectCode>  <!-- BT-21 (Sujet de la note de facture en code) : ABL -->
+          </ram:IncludedNote>
+          <ram:IncludedNote>
+               <ram:Content>55 avenue de là-bas,06000 MAVILLE, FR – contact@coop1.fr - www.coop1.fr  – N° TVA : FR37 200 000 008</ram:Content>  <!-- BT-22 (Note de facture) : 55 avenue de là-bas,06000 MAVILLE, FR – contact@coop1.fr - www.coop1.fr  – N° TVA : FR37 200 000 008 -->
+               <ram:SubjectCode>AAI</ram:SubjectCode>  <!-- BT-21 (Sujet de la note de facture en code) : AAI -->
+          </ram:IncludedNote>
+          <ram:IncludedNote>
+               <ram:Content>Tout retard de paiement engendre une pénalité exigible à compter de la date d'échéance, calculée sur la base de trois fois le taux d'intérêt légal. </ram:Content>  <!-- BT-22 (Note de facture) : Tout retard de paiement engendre une pénalité exigible à compter de la date d'échéance, calculée sur la base de trois fois le taux d'intérêt légal.  -->
+               <ram:SubjectCode>PMD</ram:SubjectCode>  <!-- BT-21 (Sujet de la note de facture en code) : PMD -->
+          </ram:IncludedNote>
+          <ram:IncludedNote>
+               <ram:Content>Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : 40 €.</ram:Content>  <!-- BT-22 (Note de facture) : Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : 40 €. -->
+               <ram:SubjectCode>PMT</ram:SubjectCode>  <!-- BT-21 (Sujet de la note de facture en code) : PMT -->
+          </ram:IncludedNote>
+          <ram:IncludedNote>
+               <ram:Content>Les réglements reçus avant la date d'échéance ne donneront pas lieu à escompte.</ram:Content>  <!-- BT-22 (Note de facture) : Les réglements reçus avant la date d'échéance ne donneront pas lieu à escompte. -->
+               <ram:SubjectCode>AAB</ram:SubjectCode>  <!-- BT-21 (Sujet de la note de facture en code) : AAB -->
+          </ram:IncludedNote>
+     </rsm:ExchangedDocument>
+     <rsm:SupplyChainTradeTransaction>
+          <ram:IncludedSupplyChainTradeLineItem>
+               <ram:AssociatedDocumentLineDocument>
+                    <ram:LineID>1</ram:LineID>  <!-- BT-126 (Identifiant de ligne de facture) : 1 -->
+               </ram:AssociatedDocumentLineDocument>
+               <ram:SpecifiedTradeProduct>
+                    <ram:Name>CNIEL</ram:Name>  <!-- BT-153 (Nom de l'article) : CNIEL -->
+                    <ram:Description>COTISATION</ram:Description>  <!-- BT-154 (Description de l'article) : COTISATION -->
+               </ram:SpecifiedTradeProduct>
+               <ram:SpecifiedLineTradeAgreement>
+                     <ram:GrossPriceProductTradePrice>
+                         <ram:ChargeAmount>0.1070</ram:ChargeAmount>  <!-- BT-148 (Prix brut de l'article) : 0.1070 -->
+                         <ram:BasisQuantity unitCode="LTR">1.0000</ram:BasisQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+                     </ram:GrossPriceProductTradePrice>
+                    <ram:NetPriceProductTradePrice>
+                         <ram:ChargeAmount>0.1070</ram:ChargeAmount>  <!-- BT-146 (Prix net de l'article) : 0.1070 -->
+                         <ram:BasisQuantity unitCode="LTR">1.0000</ram:BasisQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+                    </ram:NetPriceProductTradePrice>
+               </ram:SpecifiedLineTradeAgreement>
+               <ram:SpecifiedLineTradeDelivery>
+                    <ram:BilledQuantity unitCode="LTR">43.8100</ram:BilledQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+               </ram:SpecifiedLineTradeDelivery>
+               <ram:SpecifiedLineTradeSettlement>
+                    <ram:ApplicableTradeTax>
+                         <ram:TypeCode>VAT</ram:TypeCode>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                         <ram:CategoryCode>E</ram:CategoryCode>  <!-- BT-151 (Code de type de TVA de l'article facturé) : E -->
+                         <ram:RateApplicablePercent>0.00</ram:RateApplicablePercent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 0.00 -->
+                    </ram:ApplicableTradeTax>
+                    <ram:BillingSpecifiedPeriod>
+                         <ram:StartDateTime>
+                              <udt:DateTimeString format="102">20260501</udt:DateTimeString>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 20260501 -->
+                         </ram:StartDateTime>
+                         <ram:EndDateTime>
+                              <udt:DateTimeString format="102">20260531</udt:DateTimeString>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 20260531 -->
+                         </ram:EndDateTime>
+                    </ram:BillingSpecifiedPeriod>
+                    <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                         <ram:LineTotalAmount>4.69</ram:LineTotalAmount>  <!-- BT-131 (Montant net de ligne de facture) : 4.69 -->
+                    </ram:SpecifiedTradeSettlementLineMonetarySummation>
+               </ram:SpecifiedLineTradeSettlement>
+          </ram:IncludedSupplyChainTradeLineItem>
+          <ram:IncludedSupplyChainTradeLineItem>
+               <ram:AssociatedDocumentLineDocument>
+                    <ram:LineID>2</ram:LineID>  <!-- BT-126 (Identifiant de ligne de facture) : 2 -->
+               </ram:AssociatedDocumentLineDocument>
+               <ram:SpecifiedTradeProduct>
+                    <ram:Name>CNIEL</ram:Name>  <!-- BT-153 (Nom de l'article) : CNIEL -->
+                    <ram:Description>COTISATION Part assujettie</ram:Description>  <!-- BT-154 (Description de l'article) : COTISATION Part assujettie -->
+               </ram:SpecifiedTradeProduct>
+               <ram:SpecifiedLineTradeAgreement>
+                     <ram:GrossPriceProductTradePrice>
+                         <ram:ChargeAmount>1.1130</ram:ChargeAmount>  <!-- BT-148 (Prix brut de l'article) : 1.1130 -->
+                         <ram:BasisQuantity unitCode="LTR">1.0000</ram:BasisQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+                     </ram:GrossPriceProductTradePrice>
+                    <ram:NetPriceProductTradePrice>
+                         <ram:ChargeAmount>1.1130</ram:ChargeAmount>  <!-- BT-146 (Prix net de l'article) : 1.1130 -->
+                         <ram:BasisQuantity unitCode="LTR">1.0000</ram:BasisQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+                    </ram:NetPriceProductTradePrice>
+               </ram:SpecifiedLineTradeAgreement>
+               <ram:SpecifiedLineTradeDelivery>
+                    <ram:BilledQuantity unitCode="LTR">43.8100</ram:BilledQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+               </ram:SpecifiedLineTradeDelivery>
+               <ram:SpecifiedLineTradeSettlement>
+                    <ram:ApplicableTradeTax>
+                         <ram:TypeCode>VAT</ram:TypeCode>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                         <ram:CategoryCode>S</ram:CategoryCode>  <!-- BT-151 (Code de type de TVA de l'article facturé) : S -->
+                         <ram:RateApplicablePercent>20.00</ram:RateApplicablePercent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 20.00 -->
+                    </ram:ApplicableTradeTax>
+                    <ram:BillingSpecifiedPeriod>
+                         <ram:StartDateTime>
+                              <udt:DateTimeString format="102">20260501</udt:DateTimeString>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 20260501 -->
+                         </ram:StartDateTime>
+                         <ram:EndDateTime>
+                              <udt:DateTimeString format="102">20260531</udt:DateTimeString>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 20260531 -->
+                         </ram:EndDateTime>
+                    </ram:BillingSpecifiedPeriod>
+                    <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                         <ram:LineTotalAmount>48.76</ram:LineTotalAmount>  <!-- BT-131 (Montant net de ligne de facture) : 48.76 -->
+                    </ram:SpecifiedTradeSettlementLineMonetarySummation>
+               </ram:SpecifiedLineTradeSettlement>
+          </ram:IncludedSupplyChainTradeLineItem>
+          <ram:IncludedSupplyChainTradeLineItem>
+               <ram:AssociatedDocumentLineDocument>
+                    <ram:LineID>3</ram:LineID>  <!-- BT-126 (Identifiant de ligne de facture) : 3 -->
+               </ram:AssociatedDocumentLineDocument>
+               <ram:SpecifiedTradeProduct>
+                    <ram:Name>CNIEL</ram:Name>  <!-- BT-153 (Nom de l'article) : CNIEL -->
+                    <ram:Description>COTISATION Labo</ram:Description>  <!-- BT-154 (Description de l'article) : COTISATION Labo -->
+               </ram:SpecifiedTradeProduct>
+               <ram:SpecifiedLineTradeAgreement>
+                     <ram:GrossPriceProductTradePrice>
+                         <ram:ChargeAmount>0.3900</ram:ChargeAmount>  <!-- BT-148 (Prix brut de l'article) : 0.3900 -->
+                         <ram:BasisQuantity unitCode="LTR">1.0000</ram:BasisQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+                     </ram:GrossPriceProductTradePrice>
+                    <ram:NetPriceProductTradePrice>
+                         <ram:ChargeAmount>0.3900</ram:ChargeAmount>  <!-- BT-146 (Prix net de l'article) : 0.3900 -->
+                         <ram:BasisQuantity unitCode="LTR">1.0000</ram:BasisQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+                    </ram:NetPriceProductTradePrice>
+               </ram:SpecifiedLineTradeAgreement>
+               <ram:SpecifiedLineTradeDelivery>
+                    <ram:BilledQuantity unitCode="LTR">43.8100</ram:BilledQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+               </ram:SpecifiedLineTradeDelivery>
+               <ram:SpecifiedLineTradeSettlement>
+                    <ram:ApplicableTradeTax>
+                         <ram:TypeCode>VAT</ram:TypeCode>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                         <ram:CategoryCode>S</ram:CategoryCode>  <!-- BT-151 (Code de type de TVA de l'article facturé) : S -->
+                         <ram:RateApplicablePercent>20.00</ram:RateApplicablePercent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 20.00 -->
+                    </ram:ApplicableTradeTax>
+                    <ram:BillingSpecifiedPeriod>
+                         <ram:StartDateTime>
+                              <udt:DateTimeString format="102">20260501</udt:DateTimeString>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 20260501 -->
+                         </ram:StartDateTime>
+                         <ram:EndDateTime>
+                              <udt:DateTimeString format="102">20260531</udt:DateTimeString>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 20260531 -->
+                         </ram:EndDateTime>
+                    </ram:BillingSpecifiedPeriod>
+                    <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                         <ram:LineTotalAmount>17.09</ram:LineTotalAmount>  <!-- BT-131 (Montant net de ligne de facture) : 17.09 -->
+                    </ram:SpecifiedTradeSettlementLineMonetarySummation>
+               </ram:SpecifiedLineTradeSettlement>
+          </ram:IncludedSupplyChainTradeLineItem>
+          <ram:IncludedSupplyChainTradeLineItem>
+               <ram:AssociatedDocumentLineDocument>
+                    <ram:LineID>4</ram:LineID>  <!-- BT-126 (Identifiant de ligne de facture) : 4 -->
+               </ram:AssociatedDocumentLineDocument>
+               <ram:SpecifiedTradeProduct>
+                    <ram:Name>CNIEL</ram:Name>  <!-- BT-153 (Nom de l'article) : CNIEL -->
+                    <ram:Description>COTISATION Cliquest</ram:Description>  <!-- BT-154 (Description de l'article) : COTISATION Cliquest -->
+               </ram:SpecifiedTradeProduct>
+               <ram:SpecifiedLineTradeAgreement>
+                     <ram:GrossPriceProductTradePrice>
+                         <ram:ChargeAmount>0.0150</ram:ChargeAmount>  <!-- BT-148 (Prix brut de l'article) : 0.0150 -->
+                         <ram:BasisQuantity unitCode="LTR">1.0000</ram:BasisQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+                     </ram:GrossPriceProductTradePrice>
+                    <ram:NetPriceProductTradePrice>
+                         <ram:ChargeAmount>0.0150</ram:ChargeAmount>  <!-- BT-146 (Prix net de l'article) : 0.0150 -->
+                         <ram:BasisQuantity unitCode="LTR">1.0000</ram:BasisQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+                    </ram:NetPriceProductTradePrice>
+               </ram:SpecifiedLineTradeAgreement>
+               <ram:SpecifiedLineTradeDelivery>
+                    <ram:BilledQuantity unitCode="LTR">43.8100</ram:BilledQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+               </ram:SpecifiedLineTradeDelivery>
+               <ram:SpecifiedLineTradeSettlement>
+                    <ram:ApplicableTradeTax>
+                         <ram:TypeCode>VAT</ram:TypeCode>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                         <ram:CategoryCode>E</ram:CategoryCode>  <!-- BT-151 (Code de type de TVA de l'article facturé) : E -->
+                         <ram:RateApplicablePercent>0.00</ram:RateApplicablePercent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 0.00 -->
+                    </ram:ApplicableTradeTax>
+                    <ram:BillingSpecifiedPeriod>
+                         <ram:StartDateTime>
+                              <udt:DateTimeString format="102">20260501</udt:DateTimeString>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 20260501 -->
+                         </ram:StartDateTime>
+                         <ram:EndDateTime>
+                              <udt:DateTimeString format="102">20260531</udt:DateTimeString>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 20260531 -->
+                         </ram:EndDateTime>
+                    </ram:BillingSpecifiedPeriod>
+                    <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                         <ram:LineTotalAmount>0.66</ram:LineTotalAmount>  <!-- BT-131 (Montant net de ligne de facture) : 0.66 -->
+                    </ram:SpecifiedTradeSettlementLineMonetarySummation>
+               </ram:SpecifiedLineTradeSettlement>
+          </ram:IncludedSupplyChainTradeLineItem>
+          <ram:IncludedSupplyChainTradeLineItem>
+               <ram:AssociatedDocumentLineDocument>
+                    <ram:LineID>5</ram:LineID>  <!-- BT-126 (Identifiant de ligne de facture) : 5 -->
+               </ram:AssociatedDocumentLineDocument>
+               <ram:SpecifiedTradeProduct>
+                    <ram:Name>TANK</ram:Name>  <!-- BT-153 (Nom de l'article) : TANK -->
+                    <ram:Description>Mise à disposition</ram:Description>  <!-- BT-154 (Description de l'article) : Mise à disposition -->
+               </ram:SpecifiedTradeProduct>
+               <ram:SpecifiedLineTradeAgreement>
+                     <ram:GrossPriceProductTradePrice>
+                         <ram:ChargeAmount>3.0490</ram:ChargeAmount>  <!-- BT-148 (Prix brut de l'article) : 3.0490 -->
+                         <ram:BasisQuantity unitCode="LTR">1.0000</ram:BasisQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+                     </ram:GrossPriceProductTradePrice>
+                    <ram:NetPriceProductTradePrice>
+                         <ram:ChargeAmount>3.0490</ram:ChargeAmount>  <!-- BT-146 (Prix net de l'article) : 3.0490 -->
+                         <ram:BasisQuantity unitCode="LTR">1.0000</ram:BasisQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+                    </ram:NetPriceProductTradePrice>
+               </ram:SpecifiedLineTradeAgreement>
+               <ram:SpecifiedLineTradeDelivery>
+                    <ram:BilledQuantity unitCode="LTR">43.8100</ram:BilledQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+               </ram:SpecifiedLineTradeDelivery>
+               <ram:SpecifiedLineTradeSettlement>
+                    <ram:ApplicableTradeTax>
+                         <ram:TypeCode>VAT</ram:TypeCode>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                         <ram:CategoryCode>S</ram:CategoryCode>  <!-- BT-151 (Code de type de TVA de l'article facturé) : S -->
+                         <ram:RateApplicablePercent>20.00</ram:RateApplicablePercent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 20.00 -->
+                    </ram:ApplicableTradeTax>
+                    <ram:BillingSpecifiedPeriod>
+                         <ram:StartDateTime>
+                              <udt:DateTimeString format="102">20260501</udt:DateTimeString>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 20260501 -->
+                         </ram:StartDateTime>
+                         <ram:EndDateTime>
+                              <udt:DateTimeString format="102">20260531</udt:DateTimeString>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 20260531 -->
+                         </ram:EndDateTime>
+                    </ram:BillingSpecifiedPeriod>
+                    <ram:SpecifiedTradeSettlementLineMonetarySummation>
+                         <ram:LineTotalAmount>133.58</ram:LineTotalAmount>  <!-- BT-131 (Montant net de ligne de facture) : 133.58 -->
+                    </ram:SpecifiedTradeSettlementLineMonetarySummation>
+               </ram:SpecifiedLineTradeSettlement>
+          </ram:IncludedSupplyChainTradeLineItem>
+          <ram:ApplicableHeaderTradeAgreement>
+               <ram:SellerTradeParty>
+                    <ram:Name>COOP1</ram:Name>  <!-- BT-27 (Raison sociale du vendeur) : COOP1 -->
+                    <ram:Description>SARL AU CAPITAL DE 100 000 EUROS</ram:Description>  <!-- BT-33 (Informations juridiques additionnelles sur le vendeur) : SARL AU CAPITAL DE 100 000 EUROS -->
+                    <ram:SpecifiedLegalOrganization>
+                         <ram:ID schemeID="0002">200000008</ram:ID>  <!-- BT-30 (Identifiant d’enregistrement légal du vendeur) : 200000008 -->
+                    </ram:SpecifiedLegalOrganization>
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>06000</ram:PostcodeCode>  <!-- BT-38 (Code postal du vendeur) : 06000 -->
+                         <ram:LineOne>55 avenue de là-bas</ram:LineOne>  <!-- BT-35 (Adresse du vendeur - Ligne 1) : 55 avenue de là-bas -->
+                         <ram:LineTwo>acheteur ligne 2</ram:LineTwo>  <!-- BT-36 (Adresse du vendeur - Ligne 2) : acheteur ligne 2 -->
+                         <ram:CityName>MA VILLE</ram:CityName>  <!-- BT-37 (Localité du vendeur) : MA VILLE -->
+                         <ram:CountryID>FR</ram:CountryID>  <!-- BT-40 (Code de pays du vendeur) : FR -->
+                    </ram:PostalTradeAddress>
+                    <ram:URIUniversalCommunication>
+                         <ram:URIID schemeID="0225">200000008_STATUTS</ram:URIID>  <!-- BT-34 (Adresse électronique du vendeur ) : 200000008_STATUTS -->
+                    </ram:URIUniversalCommunication>
+                    <ram:SpecifiedTaxRegistration>
+                         <ram:ID schemeID="VA">FR37288100000008</ram:ID>  <!-- BT-31 (Identifiant à la TVA du vendeur) : FR37288100000008 -->
+                    </ram:SpecifiedTaxRegistration>
+               </ram:SellerTradeParty>
+               <ram:BuyerTradeParty>
+                    <ram:GlobalID schemeID="0088">3654789851</ram:GlobalID>  <!-- BT-46-0 (Identifiant de l'acheteur (GlobalID)) : 3654789851 -->
+                    <ram:Name>AGRI1</ram:Name>  <!-- BT-44 (Raison sociale de l'acheteur) : AGRI1 -->
+                    <ram:SpecifiedLegalOrganization>
+                         <ram:ID schemeID="0002">100000009</ram:ID>  <!-- BT-47 (Identifiant d’enregistrement  légal de l'acheteur) : 100000009 -->
+                    </ram:SpecifiedLegalOrganization>
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>75018</ram:PostcodeCode>  <!-- BT-53 (Code postal de l'acheteur) : 75018 -->
+                         <ram:LineOne>35 rue d'ici</ram:LineOne>  <!-- BT-50 (Adresse de l'acheteur - Ligne 1) : 35 rue d'ici -->
+                         <ram:LineTwo>ligne 2 vendeur</ram:LineTwo>  <!-- BT-51 (Adresse de l'acheteur - Ligne 2) : ligne 2 vendeur -->
+                         <ram:CityName>PARIS</ram:CityName>  <!-- BT-52 (Localité de l'acheteur) : PARIS -->
+                         <ram:CountryID>FR</ram:CountryID>  <!-- BT-55 (Code de pays de l'acheteur) : FR -->
+                    </ram:PostalTradeAddress>
+                    <ram:URIUniversalCommunication>
+                         <ram:URIID schemeID="0225">100000009</ram:URIID>  <!-- BT-49 (Adresse électronique de l'acheteur) : 100000009 -->
+                    </ram:URIUniversalCommunication>
+                    <ram:SpecifiedTaxRegistration>
+                         <ram:ID schemeID="VA">FR88100000009</ram:ID>  <!-- BT-48 (Identifiant à la TVA de l'acheteur) : FR88100000009 -->
+                    </ram:SpecifiedTaxRegistration>
+               </ram:BuyerTradeParty>
+          </ram:ApplicableHeaderTradeAgreement>
+          <ram:ApplicableHeaderTradeDelivery>
+               <ram:ShipToTradeParty>
+                    <ram:Name>A LA FERME</ram:Name>  <!-- BT-70 (Nom de l’intervenant à livrer) : A LA FERME -->
+                    <ram:PostalTradeAddress>
+                         <ram:PostcodeCode>75018</ram:PostcodeCode>  <!-- BT-78 (Code postal de livraison) : 75018 -->
+                         <ram:LineOne>35 rue d'ici</ram:LineOne>  <!-- BT-75 (Adresse de livraison - Ligne 1) : 35 rue d'ici -->
+                         <ram:LineTwo>ligne 2 vendeur</ram:LineTwo>  <!-- BT-76 (Adresse de livraison - Ligne 2) : ligne 2 vendeur -->
+                         <ram:CityName>PARIS</ram:CityName>  <!-- BT-77 (Localité de livraison) : PARIS -->
+                         <ram:CountryID>FR</ram:CountryID>  <!-- BT-80 (Code du pays de livraison) : FR -->
+                    </ram:PostalTradeAddress>
+               </ram:ShipToTradeParty>
+          </ram:ApplicableHeaderTradeDelivery>
+          <ram:ApplicableHeaderTradeSettlement>
+               <ram:PaymentReference>F202600037_100000009</ram:PaymentReference>  <!-- BT-83 (Référence End to End de paiement) : F202600037_100000009 -->
+               <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>  <!-- BT-5 (Code de devise de facturation) : EUR -->
+               <ram:SpecifiedTradeSettlementPaymentMeans>
+                    <ram:TypeCode>97</ram:TypeCode>  <!-- BT-81 (Code de type de moyen de paiement) : 97 -->
+                    <ram:Information>COMPENSATION</ram:Information>  <!-- BT-82 (Libellé du moyen de paiement) : COMPENSATION -->
+               </ram:SpecifiedTradeSettlementPaymentMeans>
+               <ram:ApplicableTradeTax>
+                    <ram:CalculatedAmount>39.89</ram:CalculatedAmount>  <!-- BT-117 (Montant de la taxe pour le type de TVA) : 39.89 -->
+                    <ram:TypeCode>VAT</ram:TypeCode>  <!-- BT-118-0 (Code de type de TVACode type de Taxe (VAT)) : VAT -->
+                    <ram:BasisAmount>199.43</ram:BasisAmount>  <!-- BT-116 (Base d'imposition du type de TVA) : 199.43 -->
+                    <ram:CategoryCode>S</ram:CategoryCode>  <!-- BT-118 (Code de type de TVA) : S -->
+                    <ram:DueDateTypeCode>5</ram:DueDateTypeCode>  <!-- BT-8 (Date d'exigibilité de la taxe sur la valeur ajoutée en code) : 5 -->
+                    <ram:RateApplicablePercent>20.00</ram:RateApplicablePercent>  <!-- BT-119 (Taux de type de TVA) : 20.00 -->
+               </ram:ApplicableTradeTax>
+               <ram:ApplicableTradeTax>
+                    <ram:CalculatedAmount>0.00</ram:CalculatedAmount>  <!-- BT-117 (Montant de la taxe pour le type de TVA) : 0.00 -->
+                    <ram:TypeCode>VAT</ram:TypeCode>  <!-- BT-118-0 (Code de type de TVACode type de Taxe (VAT)) : VAT -->
+                    <ram:ExemptionReason>Exo1</ram:ExemptionReason>  <!-- BT-120 (Motif d'exonération de la TVA) : Exo1 -->
+                    <ram:BasisAmount>5.35</ram:BasisAmount>  <!-- BT-116 (Base d'imposition du type de TVA) : 5.35 -->
+                    <ram:CategoryCode>E</ram:CategoryCode>  <!-- BT-118 (Code de type de TVA) : E -->
+                    <ram:DueDateTypeCode>5</ram:DueDateTypeCode>  <!-- BT-8 (Date d'exigibilité de la taxe sur la valeur ajoutée en code) : 5 -->
+                    <ram:RateApplicablePercent>0.00</ram:RateApplicablePercent>  <!-- BT-119 (Taux de type de TVA) : 0.00 -->
+               </ram:ApplicableTradeTax>
+               <ram:BillingSpecifiedPeriod>
+                    <ram:StartDateTime>
+                         <udt:DateTimeString format="102">20260501</udt:DateTimeString>  <!-- BT-73 (Date de début de période de facturation) : 20260501 -->
+                    </ram:StartDateTime>
+                    <ram:EndDateTime>
+                         <udt:DateTimeString format="102">20260531</udt:DateTimeString>  <!-- BT-74 (Date de fin de période de facturation) : 20260531 -->
+                    </ram:EndDateTime>
+               </ram:BillingSpecifiedPeriod>
+               <ram:SpecifiedTradePaymentTerms>
+                    <ram:Description>PAIEMENT 30 JOURS NET</ram:Description>  <!-- BT-20 (Conditions de paiement) : PAIEMENT 30 JOURS NET -->
+                    <ram:DueDateDateTime>
+                         <udt:DateTimeString format="102">20260702</udt:DateTimeString>  <!-- BT-9 (Date d'échéance) : 20260702 -->
+                    </ram:DueDateDateTime>
+               </ram:SpecifiedTradePaymentTerms>
+               <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+                    <ram:LineTotalAmount>204.78</ram:LineTotalAmount>  <!-- BT-106 (Somme du montant net des lignes de facture) : 204.78 -->
+                    <ram:ChargeTotalAmount>0.00</ram:ChargeTotalAmount>  <!-- BT-108 (Somme des charges ou frais au niveau du document) : 0.00 -->
+                    <ram:AllowanceTotalAmount>0.00</ram:AllowanceTotalAmount>  <!-- BT-107 (Somme des remises au niveau du document) : 0.00 -->
+                    <ram:TaxBasisTotalAmount>204.78</ram:TaxBasisTotalAmount>  <!-- BT-109 (Montant total de la facture hors TVA) : 204.78 -->
+                    <ram:TaxTotalAmount currencyID="EUR">39.89</ram:TaxTotalAmount>  <!-- BT-110 (Montant total de TVA) : 39.89 -->
+                    <ram:GrandTotalAmount>244.67</ram:GrandTotalAmount>  <!-- BT-112 (Montant total de la facture avec TVA comprise) : 244.67 -->
+                    <ram:TotalPrepaidAmount>244.67</ram:TotalPrepaidAmount>  <!-- BT-113 (Montant payé) : 244.67 -->
+                    <ram:DuePayableAmount>0.00</ram:DuePayableAmount>  <!-- BT-115 (Montant à payer) : 0.00 -->
+               </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+          </ram:ApplicableHeaderTradeSettlement>
+     </rsm:SupplyChainTradeTransaction>
+</rsm:CrossIndustryInvoice>

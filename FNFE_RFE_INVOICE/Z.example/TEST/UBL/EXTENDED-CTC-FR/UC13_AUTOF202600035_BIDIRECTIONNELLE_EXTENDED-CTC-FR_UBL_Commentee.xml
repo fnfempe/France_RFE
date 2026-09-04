@@ -1,0 +1,560 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ccts="urn:un:unece:uncefact:documentation:2"
+    xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2"
+    xmlns:udt="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2">
+    <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+     <cbc:CustomizationID>urn:cen.eu:en16931:2017#conformant#urn.cpro.gouv.fr:1p0:extended-ctc-fr</cbc:CustomizationID>  <!-- BT-24 (Identification de spécification) : urn:cen.eu:en16931:2017#conformant#urn.cpro.gouv.fr:1p0:extended-ctc-fr -->
+     <cbc:ProfileID>B9</cbc:ProfileID>  <!-- BT-23 (Identifiant de type de processus métier) : B9 -->
+     <cbc:ID>AUTOF202600035</cbc:ID>  <!-- BT-1 (Numéro de facture) : AUTOF202600035 -->
+     <cbc:IssueDate>2026-06-02</cbc:IssueDate>  <!-- BT-2 (Date d'émission de la facture) : 2026-06-02 -->
+     <cbc:DueDate>2026-07-02</cbc:DueDate>  <!-- BT-9 (Date d'échéance) : 2026-07-02 -->
+     <cbc:InvoiceTypeCode>389</cbc:InvoiceTypeCode>  <!-- BT-3 (Type de facture en code) : 389 -->
+     <cbc:Note>#REG#AGRI1 SARL au capital de 50 000 EUR</cbc:Note>  <!-- BT-22 (Note de facture) : AGRI1 SARL au capital de 50 000 EUR -->
+     <cbc:Note>#ABL#RCS MAVILLE 100 000 009</cbc:Note>  <!-- BT-22 (Note de facture) : RCS MAVILLE 100 000 009 -->
+     <cbc:Note>#AAI#35 ma rue a moi,75018 PARIS, FR – contact@vendeur.fr - www.levendeur.fr  – N° TVA : FR88 100 000 009</cbc:Note>  <!-- BT-22 (Note de facture) : 35 ma rue a moi,75018 PARIS, FR – contact@vendeur.fr - www.levendeur.fr  – N° TVA : FR88 100 000 009 -->
+     <cbc:Note>#PMD#Tout retard de paiement engendre une pénalité exigible à compter de la date d'échéance, calculée sur la base de trois fois le taux d'intérêt légal. </cbc:Note>  <!-- BT-22 (Note de facture) : Tout retard de paiement engendre une pénalité exigible à compter de la date d'échéance, calculée sur la base de trois fois le taux d'intérêt légal.  -->
+     <cbc:Note>#PMT#Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : 40 €.</cbc:Note>  <!-- BT-22 (Note de facture) : Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : 40 €. -->
+     <cbc:Note>#AAB#Les réglements reçus avant la date d'échéance ne donneront pas lieu à escompte.</cbc:Note>  <!-- BT-22 (Note de facture) : Les réglements reçus avant la date d'échéance ne donneront pas lieu à escompte. -->
+     <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>  <!-- BT-5 (Code de devise de facturation) : EUR -->
+     <cbc:BuyerReference>BU_2516</cbc:BuyerReference>  <!-- BT-10 (Référence de l’acheteur) : BU_2516 -->
+     <cac:InvoicePeriod>
+          <cbc:StartDate>2026-05-01</cbc:StartDate>  <!-- BT-73 (Date de début de période de facturation) : 2026-05-01 -->
+          <cbc:EndDate>2026-05-31</cbc:EndDate>  <!-- BT-74 (Date de fin de période de facturation) : 2026-05-31 -->
+          <cbc:DescriptionCode>3</cbc:DescriptionCode>  <!-- BT-8 (Date d'exigibilité de la taxe sur la valeur ajoutée en code) : 3 -->
+     </cac:InvoicePeriod>
+     <cac:OrderReference>
+          <cbc:ID>PO202525478</cbc:ID>  <!-- BT-13 (Identifiant de bon de commande) : PO202525478 -->
+     </cac:OrderReference>
+     <cac:AccountingSupplierParty>
+          <cac:Party>
+               <cbc:EndpointID schemeID="0225">100000009_AUTOFACT</cbc:EndpointID>  <!-- BT-34 (Adresse électronique du vendeur ) : 100000009_AUTOFACT -->
+               <cac:PartyIdentification>
+                    <cbc:ID schemeID="0088">587451236587</cbc:ID>  <!-- BT-29-0 (Identifiant du vendeur (Global ID)) : 587451236587 -->
+               </cac:PartyIdentification>
+               <cac:PartyName>
+                    <cbc:Name>VENDEUR NOM COMMERCIAL</cbc:Name>  <!-- BT-28 (Appellation commerciale du vendeur) : VENDEUR NOM COMMERCIAL -->
+               </cac:PartyName>
+               <cac:PostalAddress>
+                    <cbc:StreetName>35 rue d'ici</cbc:StreetName>  <!-- BT-35 (Adresse du vendeur - Ligne 1) : 35 rue d'ici -->
+                    <cbc:AdditionalStreetName>ligne 2 vendeur</cbc:AdditionalStreetName>  <!-- BT-36 (Adresse du vendeur - Ligne 2) : ligne 2 vendeur -->
+                    <cbc:CityName>PARIS</cbc:CityName>  <!-- BT-37 (Localité du vendeur) : PARIS -->
+                    <cbc:PostalZone>75018</cbc:PostalZone>  <!-- BT-38 (Code postal du vendeur) : 75018 -->
+                    <cac:Country>
+                         <cbc:IdentificationCode>FR</cbc:IdentificationCode>  <!-- BT-40 (Code de pays du vendeur) : FR -->
+                    </cac:Country>
+               </cac:PostalAddress>
+               <cac:PartyTaxScheme>
+                    <cbc:CompanyID>FR88100000009</cbc:CompanyID>  <!-- BT-31 (Identifiant à la TVA du vendeur) : FR88100000009 -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-31-0 (#NA) : VAT -->
+                    </cac:TaxScheme>
+               </cac:PartyTaxScheme>
+               <cac:PartyLegalEntity>
+                    <cbc:RegistrationName>AGRI1</cbc:RegistrationName>  <!-- BT-27 (Raison sociale du vendeur) : AGRI1 -->
+                    <cbc:CompanyID schemeID="0002">100000009</cbc:CompanyID>  <!-- BT-30 (Identifiant d’enregistrement légal du vendeur) : 100000009 -->
+                    <cbc:CompanyLegalForm>SARL AU CAPITAL DE 50 000 EUROS</cbc:CompanyLegalForm>  <!-- BT-33 (Informations juridiques additionnelles sur le vendeur) : SARL AU CAPITAL DE 50 000 EUROS -->
+               </cac:PartyLegalEntity>
+               <cac:Contact>
+                    <cbc:Telephone>01 02 03 54 87</cbc:Telephone>  <!-- BT-42 (Numéro de téléphone du contact vendeur) : 01 02 03 54 87 -->
+                    <cbc:ElectronicMail>contact@vendeur.fr</cbc:ElectronicMail>  <!-- BT-43 (Adresse électronique du contact vendeur) : contact@vendeur.fr -->
+               </cac:Contact>
+          </cac:Party>
+     </cac:AccountingSupplierParty>
+     <cac:AccountingCustomerParty>
+          <cac:Party>
+               <cbc:EndpointID schemeID="0225">200000008</cbc:EndpointID>  <!-- BT-49 (Adresse électronique de l'acheteur) : 200000008 -->
+               <cac:PartyIdentification>
+                    <cbc:ID schemeID="0088">3654789851</cbc:ID>  <!-- BT-46-0 (Identifiant de l'acheteur (GlobalID)) : 3654789851 -->
+               </cac:PartyIdentification>
+               <cac:PostalAddress>
+                    <cbc:StreetName>55 avenue de là-bas</cbc:StreetName>  <!-- BT-50 (Adresse de l'acheteur - Ligne 1) : 55 avenue de là-bas -->
+                    <cbc:AdditionalStreetName>acheteur ligne 2</cbc:AdditionalStreetName>  <!-- BT-51 (Adresse de l'acheteur - Ligne 2) : acheteur ligne 2 -->
+                    <cbc:CityName>MA VILLE</cbc:CityName>  <!-- BT-52 (Localité de l'acheteur) : MA VILLE -->
+                    <cbc:PostalZone>06000</cbc:PostalZone>  <!-- BT-53 (Code postal de l'acheteur) : 06000 -->
+                    <cac:Country>
+                         <cbc:IdentificationCode>FR</cbc:IdentificationCode>  <!-- BT-55 (Code de pays de l'acheteur) : FR -->
+                    </cac:Country>
+               </cac:PostalAddress>
+               <cac:PartyTaxScheme>
+                    <cbc:CompanyID >FR37200000008</cbc:CompanyID>  <!-- BT-48 (Identifiant à la TVA de l'acheteur) : FR37200000008 -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-48-0 (#NA) : VAT -->
+                    </cac:TaxScheme>
+               </cac:PartyTaxScheme>
+               <cac:PartyLegalEntity>
+                    <cbc:RegistrationName>COOP1</cbc:RegistrationName>  <!-- BT-44 (Raison sociale de l'acheteur) : COOP1 -->
+                    <cbc:CompanyID schemeID="0002">200000008</cbc:CompanyID>  <!-- BT-47 (Identifiant d’enregistrement  légal de l'acheteur) : 200000008 -->
+               </cac:PartyLegalEntity>
+          </cac:Party>
+     </cac:AccountingCustomerParty>
+     <cac:Delivery>
+          <cac:DeliveryLocation>
+               <cac:Address>
+                    <cbc:StreetName>12 impasse plus loin</cbc:StreetName>  <!-- BT-75 (Adresse de livraison - Ligne 1) : 12 impasse plus loin -->
+                    <cbc:AdditionalStreetName>livré à ligne 2</cbc:AdditionalStreetName>  <!-- BT-76 (Adresse de livraison - Ligne 2) : livré à ligne 2 -->
+                    <cbc:CityName>MA VILLE</cbc:CityName>  <!-- BT-77 (Localité de livraison) : MA VILLE -->
+                    <cbc:PostalZone>06000</cbc:PostalZone>  <!-- BT-78 (Code postal de livraison) : 06000 -->
+                    <cac:Country>
+                         <cbc:IdentificationCode>FR</cbc:IdentificationCode>  <!-- BT-80 (Code du pays de livraison) : FR -->
+                    </cac:Country>
+               </cac:Address>
+          </cac:DeliveryLocation>
+          <cac:DeliveryParty>
+               <cac:PartyName>
+                    <cbc:Name>NOUS AUSSI</cbc:Name>  <!-- BT-70 (Nom de l’intervenant à livrer) : NOUS AUSSI -->
+               </cac:PartyName>
+          </cac:DeliveryParty>
+     </cac:Delivery>
+     <cac:PaymentMeans>
+          <cbc:PaymentMeansCode name="Virement">58</cbc:PaymentMeansCode>  <!-- BT-81 (Code de type de moyen de paiement) : 58 -->
+          <cbc:PaymentID>AUTOF202600035_200000008</cbc:PaymentID>  <!-- BT-83 (Référence End to End de paiement) : AUTOF202600035_200000008 -->
+          <cac:PayeeFinancialAccount>
+               <cbc:ID>FR20 1254 2547 2569 8542 5874 698</cbc:ID>  <!-- BT-84 (Identifiant (IBAN) du compte bancaire du bénéficiaire) : FR20 1254 2547 2569 8542 5874 698 -->
+               <cbc:Name>MON COMPTE BANCAIRE</cbc:Name>  <!-- BT-85 (Nom du compte bancaire du bénéficiaire) : MON COMPTE BANCAIRE -->
+               <cac:FinancialInstitutionBranch>
+                    <cbc:ID>BIC_MONCOMPTE</cbc:ID>  <!-- BT-86 (Identifiant d'établissement financier du compte bénéficiaire) : BIC_MONCOMPTE -->
+               </cac:FinancialInstitutionBranch>
+          </cac:PayeeFinancialAccount>
+     </cac:PaymentMeans>
+     <cac:PaymentTerms>
+          <cbc:Note>PAIEMENT 30 JOURS NET</cbc:Note>  <!-- BT-20 (Conditions de paiement) : PAIEMENT 30 JOURS NET -->
+     </cac:PaymentTerms>
+     <cac:TaxTotal>
+          <cbc:TaxAmount currencyID="EUR">1138.52</cbc:TaxAmount>  <!-- BT-110 (Montant total de TVA) : 1138.52 -->
+          <cac:TaxSubtotal>
+               <cbc:TaxableAmount currencyID="EUR">21425.59</cbc:TaxableAmount>  <!-- BT-116 (Base d'imposition du type de TVA) : 21425.59 -->
+               <cbc:TaxAmount currencyID="EUR">1178.41</cbc:TaxAmount>  <!-- BT-117 (Montant de la taxe pour le type de TVA) : 1178.41 -->
+               <cac:TaxCategory>
+                    <cbc:ID>S</cbc:ID>  <!-- BT-118 (Code de type de TVA) : S -->
+                    <cbc:Percent>5.50</cbc:Percent>  <!-- BT-119 (Taux de type de TVA) : 5.50 -->
+                    <cbc:TaxExemptionReason>#AUTOF202600035#</cbc:TaxExemptionReason>  <!-- BT-120 (Motif d'exonération de la TVA) : #AUTOF202600035# -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!--  () : VAT -->
+                    </cac:TaxScheme>
+               </cac:TaxCategory>
+          </cac:TaxSubtotal>
+          <cac:TaxSubtotal>
+               <cbc:TaxableAmount currencyID="EUR">-199.43</cbc:TaxableAmount>  <!-- BT-116 (Base d'imposition du type de TVA) : -199.43 -->
+               <cbc:TaxAmount currencyID="EUR">-39.89</cbc:TaxAmount>  <!-- BT-117 (Montant de la taxe pour le type de TVA) : -39.89 -->
+               <cac:TaxCategory>
+                    <cbc:ID>S</cbc:ID>  <!-- BT-118 (Code de type de TVA) : S -->
+                    <cbc:Percent>20.00</cbc:Percent>  <!-- BT-119 (Taux de type de TVA) : 20.00 -->
+                    <cbc:TaxExemptionReason>#AGRI1_F202600035#</cbc:TaxExemptionReason>  <!-- BT-120 (Motif d'exonération de la TVA) : #AGRI1_F202600035# -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!--  () : VAT -->
+                    </cac:TaxScheme>
+               </cac:TaxCategory>
+          </cac:TaxSubtotal>
+          <cac:TaxSubtotal>
+               <cbc:TaxableAmount currencyID="EUR">-5.35</cbc:TaxableAmount>  <!-- BT-116 (Base d'imposition du type de TVA) : -5.35 -->
+               <cbc:TaxAmount currencyID="EUR">0.00</cbc:TaxAmount>  <!-- BT-117 (Montant de la taxe pour le type de TVA) : 0.00 -->
+               <cac:TaxCategory>
+                    <cbc:ID>E</cbc:ID>  <!-- BT-118 (Code de type de TVA) : E -->
+                    <cbc:Percent>0.00</cbc:Percent>  <!-- BT-119 (Taux de type de TVA) : 0.00 -->
+                    <cbc:TaxExemptionReason>#AGRI1_F202600035#Exo1</cbc:TaxExemptionReason>  <!-- BT-120 (Motif d'exonération de la TVA) : #AGRI1_F202600035#Exo1 -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!--  () : VAT -->
+                    </cac:TaxScheme>
+               </cac:TaxCategory>
+          </cac:TaxSubtotal>
+     </cac:TaxTotal>
+     <cac:LegalMonetaryTotal>
+          <cbc:LineExtensionAmount currencyID="EUR">21220.81</cbc:LineExtensionAmount>  <!-- BT-106 (Somme du montant net des lignes de facture) : 21220.81 -->
+          <cbc:TaxExclusiveAmount currencyID="EUR">21220.81</cbc:TaxExclusiveAmount>  <!-- BT-109 (Montant total de la facture hors TVA) : 21220.81 -->
+          <cbc:TaxInclusiveAmount currencyID="EUR">22359.33</cbc:TaxInclusiveAmount>  <!-- BT-112 (Montant total de la facture avec TVA comprise) : 22359.33 -->
+          <cbc:AllowanceTotalAmount currencyID="EUR">0.00</cbc:AllowanceTotalAmount>  <!-- BT-107 (Somme des remises au niveau du document) : 0.00 -->
+          <cbc:ChargeTotalAmount currencyID="EUR">0.00</cbc:ChargeTotalAmount>  <!-- BT-108 (Somme des charges ou frais au niveau du document) : 0.00 -->
+          <cbc:PrepaidAmount currencyID="EUR">0.00</cbc:PrepaidAmount>  <!-- BT-113 (Montant payé) : 0.00 -->
+          <cbc:PayableAmount  currencyID="EUR">22359.33</cbc:PayableAmount>  <!-- BT-115 (Montant à payer) : 22359.33 -->
+     </cac:LegalMonetaryTotal>
+     <cac:InvoiceLine>
+          <cbc:ID>10</cbc:ID>  <!-- BT-126 (Identifiant de ligne de facture) : 10 -->
+          <cbc:LineExtensionAmount currencyID="EUR">21425.59</cbc:LineExtensionAmount>  <!-- BT-131 (Montant net de ligne de facture) : 21425.59 -->
+          <cac:InvoicePeriod>
+               <cbc:StartDate>2026-05-01</cbc:StartDate>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 2026-05-01 -->
+               <cbc:EndDate>2026-05-31</cbc:EndDate>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 2026-05-31 -->
+          </cac:InvoicePeriod>
+          <cac:BillingReference>
+               <cac:InvoiceDocumentReference>
+                    <cbc:ID>AUTOF202600035</cbc:ID>  <!-- BT-1 (Numéro de facture) : AUTOF202600035 -->
+                    <cbc:DocumentStatusCode>GROUP</cbc:DocumentStatusCode>  <!-- EXT-FR-FE-163 (Sous-type de ligne de facture) : GROUP -->
+               </cac:InvoiceDocumentReference>
+          </cac:BillingReference>
+          <cac:DocumentReference>
+               <cbc:ID schemeID="AVV">B1</cbc:ID>  <!-- BT-128 (Identifiant de l'objet à la ligne) : B1 -->
+               <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+          </cac:DocumentReference>
+          <cac:DocumentReference>
+               <cbc:ID schemeID="AFL">AUTOF202600035</cbc:ID>  <!-- BT-128 (Identifiant de l'objet à la ligne) : AUTOF202600035 -->
+               <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+          </cac:DocumentReference>
+          <cac:TaxTotal>
+               <cbc:TaxAmount currencyID="EUR">1178.41</cbc:TaxAmount>  <!-- EXT-FR-FE-181 (Montant TVA de la ligne de facture dans la devise de la facture) : 1178.41 -->
+          </cac:TaxTotal>
+          <cac:Item>
+               <cbc:Description>VENTE DE LAIT</cbc:Description>  <!-- BT-154 (Description de l'article) : VENTE DE LAIT -->
+               <cbc:Name>TOTAL</cbc:Name>  <!-- BT-153 (Nom de l'article) : TOTAL -->
+               <cac:ManufacturerParty>
+                    <cac:PostalAddress>
+                         <cac:Country>
+                              <cbc:IdentificationCode>FR</cbc:IdentificationCode>  <!-- EXT-FR-FE-177 (Code de pays du vendeur à la ligne) : FR -->
+                         </cac:Country>
+                    </cac:PostalAddress>
+                    <cac:PartyTaxScheme>
+                         <cbc:CompanyID>FR88100000009</cbc:CompanyID>  <!-- EXT-FR-FE-168 (Identifiant à la TVA du vendeur à la ligne) : FR88100000009 -->
+                         <cac:TaxScheme>
+                              <cbc:ID>VAT</cbc:ID>  <!-- EXT-FR-FE-168-1 (#NA) : VAT -->
+                         </cac:TaxScheme>
+                    </cac:PartyTaxScheme>
+                    <cac:PartyLegalEntity>
+                         <cbc:RegistrationName>AGRI1</cbc:RegistrationName>  <!-- EXT-FR-FE-164 (Raison sociale du vendeur à la ligne) : AGRI1 -->
+                         <cbc:CompanyID schemeID="0002">100000009</cbc:CompanyID>  <!-- EXT-FR-FE-167 (Identifiant d’enregistrement légal du vendeur à la ligne) : 100000009 -->
+                    </cac:PartyLegalEntity>
+               </cac:ManufacturerParty>
+          </cac:Item>
+     </cac:InvoiceLine>
+     <cac:InvoiceLine>
+          <cbc:ID>11</cbc:ID>  <!-- BT-126 (Identifiant de ligne de facture) : 11 -->
+          <cbc:InvoicedQuantity unitCode="LTR">43.8100</cbc:InvoicedQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+          <cbc:LineExtensionAmount currencyID="EUR">21425.59</cbc:LineExtensionAmount>  <!-- BT-131 (Montant net de ligne de facture) : 21425.59 -->
+          <cac:InvoicePeriod>
+               <cbc:StartDate>2026-05-01</cbc:StartDate>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 2026-05-01 -->
+               <cbc:EndDate>2026-05-31</cbc:EndDate>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 2026-05-31 -->
+               <cbc:DescriptionCode>3</cbc:DescriptionCode>  <!-- EXT-FR-FE-180 (Date d'exigibilité de la taxe sur la valeur ajoutée en code à la ligne) : 3 -->
+          </cac:InvoicePeriod>
+          <cac:BillingReference>
+               <cac:InvoiceDocumentReference>
+                    <cbc:ID>AUTOF202600035</cbc:ID>  <!-- BT-1 (Numéro de facture) : AUTOF202600035 -->
+                    <cbc:DocumentStatusCode>DETAIL</cbc:DocumentStatusCode>  <!-- EXT-FR-FE-163 (Sous-type de ligne de facture) : DETAIL -->
+               </cac:InvoiceDocumentReference>
+               <cac:BillingReferenceLine>
+                    <cbc:ID>10</cbc:ID>  <!-- EXT-FR-FE-162 (Identifiant de ligne Parent) : 10 -->
+               </cac:BillingReferenceLine>
+          </cac:BillingReference>
+          <cac:DocumentReference>
+               <cbc:ID schemeID="AFL">AUTOF202600035</cbc:ID>  <!-- BT-128 (Identifiant de l'objet à la ligne) : AUTOF202600035 -->
+               <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+          </cac:DocumentReference>
+          <cac:Item>
+               <cbc:Description>LAIT ENTIER COLLECTE MENSUELLE</cbc:Description>  <!-- BT-154 (Description de l'article) : LAIT ENTIER COLLECTE MENSUELLE -->
+               <cbc:Name>LAIT</cbc:Name>  <!-- BT-153 (Nom de l'article) : LAIT -->
+               <cac:ClassifiedTaxCategory>
+                    <cbc:ID>S</cbc:ID>  <!-- BT-151 (Code de type de TVA de l'article facturé) : S -->
+                    <cbc:Percent>5.50</cbc:Percent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 5.50 -->
+                    <cbc:TaxExemptionReason>#AUTOF202600035#</cbc:TaxExemptionReason>  <!-- EXT-FR-FE-178 (Raison d'exemption de TVA en ligne) : #AUTOF202600035# -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                    </cac:TaxScheme>
+               </cac:ClassifiedTaxCategory>
+               <cac:ManufacturerParty>
+                    <cac:PartyLegalEntity>
+                         <cbc:CompanyID schemeID="0002">100000009</cbc:CompanyID>  <!-- EXT-FR-FE-167 (Identifiant d’enregistrement légal du vendeur à la ligne) : 100000009 -->
+                    </cac:PartyLegalEntity>
+               </cac:ManufacturerParty>
+          </cac:Item>
+          <cac:Price>
+               <cbc:PriceAmount currencyID="EUR">489.0570</cbc:PriceAmount>  <!-- BT-146 (Prix net de l'article) : 489.0570 -->
+               <cbc:BaseQuantity unitCode="LTR">1.0000</cbc:BaseQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+               <cac:AllowanceCharge>
+                    <cbc:ChargeIndicator>false</cbc:ChargeIndicator>  <!--  () : false -->
+                    <cbc:Amount currencyID="EUR">0.0000</cbc:Amount>  <!-- BT-147 (Rabais sur le prix de l'article) : 0.0000 -->
+                    <cbc:BaseAmount  currencyID="EUR">489.0570</cbc:BaseAmount>  <!-- BT-148 (Prix brut de l'article) : 489.0570 -->
+               </cac:AllowanceCharge>
+          </cac:Price>
+     </cac:InvoiceLine>
+     <cac:InvoiceLine>
+          <cbc:ID>20</cbc:ID>  <!-- BT-126 (Identifiant de ligne de facture) : 20 -->
+          <cbc:LineExtensionAmount currencyID="EUR">-204.78</cbc:LineExtensionAmount>  <!-- BT-131 (Montant net de ligne de facture) : -204.78 -->
+          <cac:InvoicePeriod>
+               <cbc:StartDate>2026-05-01</cbc:StartDate>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 2026-05-01 -->
+               <cbc:EndDate>2026-05-31</cbc:EndDate>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 2026-05-31 -->
+          </cac:InvoicePeriod>
+          <cac:BillingReference>
+               <cac:InvoiceDocumentReference>
+                    <cbc:ID>AUTOF202600035</cbc:ID>  <!-- BT-1 (Numéro de facture) : AUTOF202600035 -->
+                    <cbc:DocumentStatusCode>GROUP</cbc:DocumentStatusCode>  <!-- EXT-FR-FE-163 (Sous-type de ligne de facture) : GROUP -->
+               </cac:InvoiceDocumentReference>
+          </cac:BillingReference>
+          <cac:DocumentReference>
+               <cbc:ID schemeID="AVV">B1</cbc:ID>  <!-- BT-128 (Identifiant de l'objet à la ligne) : B1 -->
+               <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+          </cac:DocumentReference>
+          <cac:DocumentReference>
+               <cbc:ID schemeID="AFL">AGRI1_F202600035</cbc:ID>  <!-- BT-128 (Identifiant de l'objet à la ligne) : AGRI1_F202600035 -->
+               <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+          </cac:DocumentReference>
+          <cac:TaxTotal>
+               <cbc:TaxAmount currencyID="EUR">-39.89</cbc:TaxAmount>  <!-- EXT-FR-FE-181 (Montant TVA de la ligne de facture dans la devise de la facture) : -39.89 -->
+          </cac:TaxTotal>
+          <cac:Item>
+               <cbc:Description>DEDUCTIONS</cbc:Description>  <!-- BT-154 (Description de l'article) : DEDUCTIONS -->
+               <cbc:Name>TOTAL</cbc:Name>  <!-- BT-153 (Nom de l'article) : TOTAL -->
+               <cac:ManufacturerParty>
+                    <cac:PostalAddress>
+                         <cac:Country>
+                              <cbc:IdentificationCode>FR</cbc:IdentificationCode>  <!-- EXT-FR-FE-177 (Code de pays du vendeur à la ligne) : FR -->
+                         </cac:Country>
+                    </cac:PostalAddress>
+                    <cac:PartyTaxScheme>
+                         <cbc:CompanyID>FR37200000008</cbc:CompanyID>  <!-- EXT-FR-FE-168 (Identifiant à la TVA du vendeur à la ligne) : FR37200000008 -->
+                         <cac:TaxScheme>
+                              <cbc:ID>VAT</cbc:ID>  <!-- EXT-FR-FE-168-1 (#NA) : VAT -->
+                         </cac:TaxScheme>
+                    </cac:PartyTaxScheme>
+                    <cac:PartyLegalEntity>
+                         <cbc:RegistrationName>COOP1</cbc:RegistrationName>  <!-- EXT-FR-FE-164 (Raison sociale du vendeur à la ligne) : COOP1 -->
+                         <cbc:CompanyID schemeID="0002">200000008</cbc:CompanyID>  <!-- EXT-FR-FE-167 (Identifiant d’enregistrement légal du vendeur à la ligne) : 200000008 -->
+                    </cac:PartyLegalEntity>
+               </cac:ManufacturerParty>
+          </cac:Item>
+     </cac:InvoiceLine>
+     <cac:InvoiceLine>
+          <cbc:ID>21</cbc:ID>  <!-- BT-126 (Identifiant de ligne de facture) : 21 -->
+          <cbc:InvoicedQuantity unitCode="LTR">43.8100</cbc:InvoicedQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+          <cbc:LineExtensionAmount currencyID="EUR">-4.69</cbc:LineExtensionAmount>  <!-- BT-131 (Montant net de ligne de facture) : -4.69 -->
+          <cac:InvoicePeriod>
+               <cbc:StartDate>2026-05-01</cbc:StartDate>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 2026-05-01 -->
+               <cbc:EndDate>2026-05-31</cbc:EndDate>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 2026-05-31 -->
+               <cbc:DescriptionCode>3</cbc:DescriptionCode>  <!-- EXT-FR-FE-180 (Date d'exigibilité de la taxe sur la valeur ajoutée en code à la ligne) : 3 -->
+          </cac:InvoicePeriod>
+          <cac:BillingReference>
+               <cac:InvoiceDocumentReference>
+                    <cbc:ID>AUTOF202600035</cbc:ID>  <!-- BT-1 (Numéro de facture) : AUTOF202600035 -->
+                    <cbc:DocumentStatusCode>DETAIL</cbc:DocumentStatusCode>  <!-- EXT-FR-FE-163 (Sous-type de ligne de facture) : DETAIL -->
+               </cac:InvoiceDocumentReference>
+               <cac:BillingReferenceLine>
+                    <cbc:ID>20</cbc:ID>  <!-- EXT-FR-FE-162 (Identifiant de ligne Parent) : 20 -->
+               </cac:BillingReferenceLine>
+          </cac:BillingReference>
+          <cac:DocumentReference>
+               <cbc:ID schemeID="AFL">AGRI1_F202600035</cbc:ID>  <!-- BT-128 (Identifiant de l'objet à la ligne) : AGRI1_F202600035 -->
+               <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+          </cac:DocumentReference>
+          <cac:Item>
+               <cbc:Description>COTISATION</cbc:Description>  <!-- BT-154 (Description de l'article) : COTISATION -->
+               <cbc:Name>CNIEL</cbc:Name>  <!-- BT-153 (Nom de l'article) : CNIEL -->
+               <cac:ClassifiedTaxCategory>
+                    <cbc:ID>E</cbc:ID>  <!-- BT-151 (Code de type de TVA de l'article facturé) : E -->
+                    <cbc:Percent>0.00</cbc:Percent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 0.00 -->
+                    <cbc:TaxExemptionReason>#AGRI1_F202600035#Exo1</cbc:TaxExemptionReason>  <!-- EXT-FR-FE-178 (Raison d'exemption de TVA en ligne) : #AGRI1_F202600035#Exo1 -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                    </cac:TaxScheme>
+               </cac:ClassifiedTaxCategory>
+               <cac:ManufacturerParty>
+                    <cac:PartyLegalEntity>
+                         <cbc:CompanyID schemeID="0002">200000008</cbc:CompanyID>  <!-- EXT-FR-FE-167 (Identifiant d’enregistrement légal du vendeur à la ligne) : 200000008 -->
+                    </cac:PartyLegalEntity>
+               </cac:ManufacturerParty>
+          </cac:Item>
+          <cac:Price>
+               <cbc:PriceAmount currencyID="EUR">-0.1070</cbc:PriceAmount>  <!-- BT-146 (Prix net de l'article) : -0.1070 -->
+               <cbc:BaseQuantity unitCode="LTR">1.0000</cbc:BaseQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+               <cac:AllowanceCharge>
+                    <cbc:ChargeIndicator>false</cbc:ChargeIndicator>  <!--  () : false -->
+                    <cbc:Amount currencyID="EUR">0.0000</cbc:Amount>  <!-- BT-147 (Rabais sur le prix de l'article) : 0.0000 -->
+                    <cbc:BaseAmount  currencyID="EUR">-0.1070</cbc:BaseAmount>  <!-- BT-148 (Prix brut de l'article) : -0.1070 -->
+               </cac:AllowanceCharge>
+          </cac:Price>
+     </cac:InvoiceLine>
+     <cac:InvoiceLine>
+          <cbc:ID>22</cbc:ID>  <!-- BT-126 (Identifiant de ligne de facture) : 22 -->
+          <cbc:InvoicedQuantity unitCode="LTR">43.8100</cbc:InvoicedQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+          <cbc:LineExtensionAmount currencyID="EUR">-48.76</cbc:LineExtensionAmount>  <!-- BT-131 (Montant net de ligne de facture) : -48.76 -->
+          <cac:InvoicePeriod>
+               <cbc:StartDate>2026-05-01</cbc:StartDate>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 2026-05-01 -->
+               <cbc:EndDate>2026-05-31</cbc:EndDate>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 2026-05-31 -->
+               <cbc:DescriptionCode>3</cbc:DescriptionCode>  <!-- EXT-FR-FE-180 (Date d'exigibilité de la taxe sur la valeur ajoutée en code à la ligne) : 3 -->
+          </cac:InvoicePeriod>
+          <cac:BillingReference>
+               <cac:InvoiceDocumentReference>
+                    <cbc:ID>AUTOF202600035</cbc:ID>  <!-- BT-1 (Numéro de facture) : AUTOF202600035 -->
+                    <cbc:DocumentStatusCode>DETAIL</cbc:DocumentStatusCode>  <!-- EXT-FR-FE-163 (Sous-type de ligne de facture) : DETAIL -->
+               </cac:InvoiceDocumentReference>
+               <cac:BillingReferenceLine>
+                    <cbc:ID>20</cbc:ID>  <!-- EXT-FR-FE-162 (Identifiant de ligne Parent) : 20 -->
+               </cac:BillingReferenceLine>
+          </cac:BillingReference>
+          <cac:DocumentReference>
+               <cbc:ID schemeID="AFL">AGRI1_F202600035</cbc:ID>  <!-- BT-128 (Identifiant de l'objet à la ligne) : AGRI1_F202600035 -->
+               <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+          </cac:DocumentReference>
+          <cac:Item>
+               <cbc:Description>COTISATION Part assujettie</cbc:Description>  <!-- BT-154 (Description de l'article) : COTISATION Part assujettie -->
+               <cbc:Name>CNIEL</cbc:Name>  <!-- BT-153 (Nom de l'article) : CNIEL -->
+               <cac:ClassifiedTaxCategory>
+                    <cbc:ID>S</cbc:ID>  <!-- BT-151 (Code de type de TVA de l'article facturé) : S -->
+                    <cbc:Percent>20.00</cbc:Percent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 20.00 -->
+                    <cbc:TaxExemptionReason>#AGRI1_F202600035#</cbc:TaxExemptionReason>  <!-- EXT-FR-FE-178 (Raison d'exemption de TVA en ligne) : #AGRI1_F202600035# -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                    </cac:TaxScheme>
+               </cac:ClassifiedTaxCategory>
+               <cac:ManufacturerParty>
+                    <cac:PartyLegalEntity>
+                         <cbc:CompanyID schemeID="0002">200000008</cbc:CompanyID>  <!-- EXT-FR-FE-167 (Identifiant d’enregistrement légal du vendeur à la ligne) : 200000008 -->
+                    </cac:PartyLegalEntity>
+               </cac:ManufacturerParty>
+          </cac:Item>
+          <cac:Price>
+               <cbc:PriceAmount currencyID="EUR">-1.1130</cbc:PriceAmount>  <!-- BT-146 (Prix net de l'article) : -1.1130 -->
+               <cbc:BaseQuantity unitCode="LTR">1.0000</cbc:BaseQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+               <cac:AllowanceCharge>
+                    <cbc:ChargeIndicator>false</cbc:ChargeIndicator>  <!--  () : false -->
+                    <cbc:Amount currencyID="EUR">0.0000</cbc:Amount>  <!-- BT-147 (Rabais sur le prix de l'article) : 0.0000 -->
+                    <cbc:BaseAmount  currencyID="EUR">-1.1130</cbc:BaseAmount>  <!-- BT-148 (Prix brut de l'article) : -1.1130 -->
+               </cac:AllowanceCharge>
+          </cac:Price>
+     </cac:InvoiceLine>
+     <cac:InvoiceLine>
+          <cbc:ID>23</cbc:ID>  <!-- BT-126 (Identifiant de ligne de facture) : 23 -->
+          <cbc:InvoicedQuantity unitCode="LTR">43.8100</cbc:InvoicedQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+          <cbc:LineExtensionAmount currencyID="EUR">-17.09</cbc:LineExtensionAmount>  <!-- BT-131 (Montant net de ligne de facture) : -17.09 -->
+          <cac:InvoicePeriod>
+               <cbc:StartDate>2026-05-01</cbc:StartDate>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 2026-05-01 -->
+               <cbc:EndDate>2026-05-31</cbc:EndDate>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 2026-05-31 -->
+               <cbc:DescriptionCode>3</cbc:DescriptionCode>  <!-- EXT-FR-FE-180 (Date d'exigibilité de la taxe sur la valeur ajoutée en code à la ligne) : 3 -->
+          </cac:InvoicePeriod>
+          <cac:BillingReference>
+               <cac:InvoiceDocumentReference>
+                    <cbc:ID>AUTOF202600035</cbc:ID>  <!-- BT-1 (Numéro de facture) : AUTOF202600035 -->
+                    <cbc:DocumentStatusCode>DETAIL</cbc:DocumentStatusCode>  <!-- EXT-FR-FE-163 (Sous-type de ligne de facture) : DETAIL -->
+               </cac:InvoiceDocumentReference>
+               <cac:BillingReferenceLine>
+                    <cbc:ID>20</cbc:ID>  <!-- EXT-FR-FE-162 (Identifiant de ligne Parent) : 20 -->
+               </cac:BillingReferenceLine>
+          </cac:BillingReference>
+          <cac:DocumentReference>
+               <cbc:ID schemeID="AFL">AGRI1_F202600035</cbc:ID>  <!-- BT-128 (Identifiant de l'objet à la ligne) : AGRI1_F202600035 -->
+               <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+          </cac:DocumentReference>
+          <cac:Item>
+               <cbc:Description>COTISATION Labo</cbc:Description>  <!-- BT-154 (Description de l'article) : COTISATION Labo -->
+               <cbc:Name>CNIEL</cbc:Name>  <!-- BT-153 (Nom de l'article) : CNIEL -->
+               <cac:ClassifiedTaxCategory>
+                    <cbc:ID>S</cbc:ID>  <!-- BT-151 (Code de type de TVA de l'article facturé) : S -->
+                    <cbc:Percent>20.00</cbc:Percent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 20.00 -->
+                    <cbc:TaxExemptionReason>#AGRI1_F202600035#</cbc:TaxExemptionReason>  <!-- EXT-FR-FE-178 (Raison d'exemption de TVA en ligne) : #AGRI1_F202600035# -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                    </cac:TaxScheme>
+               </cac:ClassifiedTaxCategory>
+               <cac:ManufacturerParty>
+                    <cac:PartyLegalEntity>
+                         <cbc:CompanyID schemeID="0002">200000008</cbc:CompanyID>  <!-- EXT-FR-FE-167 (Identifiant d’enregistrement légal du vendeur à la ligne) : 200000008 -->
+                    </cac:PartyLegalEntity>
+               </cac:ManufacturerParty>
+          </cac:Item>
+          <cac:Price>
+               <cbc:PriceAmount currencyID="EUR">-0.3900</cbc:PriceAmount>  <!-- BT-146 (Prix net de l'article) : -0.3900 -->
+               <cbc:BaseQuantity unitCode="LTR">1.0000</cbc:BaseQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+               <cac:AllowanceCharge>
+                    <cbc:ChargeIndicator>false</cbc:ChargeIndicator>  <!--  () : false -->
+                    <cbc:Amount currencyID="EUR">0.0000</cbc:Amount>  <!-- BT-147 (Rabais sur le prix de l'article) : 0.0000 -->
+                    <cbc:BaseAmount  currencyID="EUR">-0.3900</cbc:BaseAmount>  <!-- BT-148 (Prix brut de l'article) : -0.3900 -->
+               </cac:AllowanceCharge>
+          </cac:Price>
+     </cac:InvoiceLine>
+     <cac:InvoiceLine>
+          <cbc:ID>24</cbc:ID>  <!-- BT-126 (Identifiant de ligne de facture) : 24 -->
+          <cbc:InvoicedQuantity unitCode="LTR">43.8100</cbc:InvoicedQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+          <cbc:LineExtensionAmount currencyID="EUR">-0.66</cbc:LineExtensionAmount>  <!-- BT-131 (Montant net de ligne de facture) : -0.66 -->
+          <cac:InvoicePeriod>
+               <cbc:StartDate>2026-05-01</cbc:StartDate>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 2026-05-01 -->
+               <cbc:EndDate>2026-05-31</cbc:EndDate>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 2026-05-31 -->
+               <cbc:DescriptionCode>3</cbc:DescriptionCode>  <!-- EXT-FR-FE-180 (Date d'exigibilité de la taxe sur la valeur ajoutée en code à la ligne) : 3 -->
+          </cac:InvoicePeriod>
+          <cac:BillingReference>
+               <cac:InvoiceDocumentReference>
+                    <cbc:ID>AUTOF202600035</cbc:ID>  <!-- BT-1 (Numéro de facture) : AUTOF202600035 -->
+                    <cbc:DocumentStatusCode>DETAIL</cbc:DocumentStatusCode>  <!-- EXT-FR-FE-163 (Sous-type de ligne de facture) : DETAIL -->
+               </cac:InvoiceDocumentReference>
+               <cac:BillingReferenceLine>
+                    <cbc:ID>20</cbc:ID>  <!-- EXT-FR-FE-162 (Identifiant de ligne Parent) : 20 -->
+               </cac:BillingReferenceLine>
+          </cac:BillingReference>
+          <cac:DocumentReference>
+               <cbc:ID schemeID="AFL">AGRI1_F202600035</cbc:ID>  <!-- BT-128 (Identifiant de l'objet à la ligne) : AGRI1_F202600035 -->
+               <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+          </cac:DocumentReference>
+          <cac:Item>
+               <cbc:Description>COTISATION Cliquest</cbc:Description>  <!-- BT-154 (Description de l'article) : COTISATION Cliquest -->
+               <cbc:Name>CNIEL</cbc:Name>  <!-- BT-153 (Nom de l'article) : CNIEL -->
+               <cac:ClassifiedTaxCategory>
+                    <cbc:ID>E</cbc:ID>  <!-- BT-151 (Code de type de TVA de l'article facturé) : E -->
+                    <cbc:Percent>0.00</cbc:Percent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 0.00 -->
+                    <cbc:TaxExemptionReason>#AGRI1_F202600035#Exo1</cbc:TaxExemptionReason>  <!-- EXT-FR-FE-178 (Raison d'exemption de TVA en ligne) : #AGRI1_F202600035#Exo1 -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                    </cac:TaxScheme>
+               </cac:ClassifiedTaxCategory>
+               <cac:ManufacturerParty>
+                    <cac:PartyLegalEntity>
+                         <cbc:CompanyID schemeID="0002">200000008</cbc:CompanyID>  <!-- EXT-FR-FE-167 (Identifiant d’enregistrement légal du vendeur à la ligne) : 200000008 -->
+                    </cac:PartyLegalEntity>
+               </cac:ManufacturerParty>
+          </cac:Item>
+          <cac:Price>
+               <cbc:PriceAmount currencyID="EUR">-0.0150</cbc:PriceAmount>  <!-- BT-146 (Prix net de l'article) : -0.0150 -->
+               <cbc:BaseQuantity unitCode="LTR">1.0000</cbc:BaseQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+               <cac:AllowanceCharge>
+                    <cbc:ChargeIndicator>false</cbc:ChargeIndicator>  <!--  () : false -->
+                    <cbc:Amount currencyID="EUR">0.0000</cbc:Amount>  <!-- BT-147 (Rabais sur le prix de l'article) : 0.0000 -->
+                    <cbc:BaseAmount  currencyID="EUR">-0.0150</cbc:BaseAmount>  <!-- BT-148 (Prix brut de l'article) : -0.0150 -->
+               </cac:AllowanceCharge>
+          </cac:Price>
+     </cac:InvoiceLine>
+     <cac:InvoiceLine>
+          <cbc:ID>30</cbc:ID>  <!-- BT-126 (Identifiant de ligne de facture) : 30 -->
+          <cbc:InvoicedQuantity unitCode="LTR">43.8100</cbc:InvoicedQuantity>  <!-- BT-129 (Quantité facturée) : 43.8100 -->
+          <cbc:LineExtensionAmount currencyID="EUR">-133.58</cbc:LineExtensionAmount>  <!-- BT-131 (Montant net de ligne de facture) : -133.58 -->
+          <cac:InvoicePeriod>
+               <cbc:StartDate>2026-05-01</cbc:StartDate>  <!-- BT-134 (Date de début de période de facturation d'une ligne) : 2026-05-01 -->
+               <cbc:EndDate>2026-05-31</cbc:EndDate>  <!-- BT-135 (Date de fin de période de facturation d'une ligne) : 2026-05-31 -->
+               <cbc:DescriptionCode>3</cbc:DescriptionCode>  <!-- EXT-FR-FE-180 (Date d'exigibilité de la taxe sur la valeur ajoutée en code à la ligne) : 3 -->
+          </cac:InvoicePeriod>
+          <cac:BillingReference>
+               <cac:InvoiceDocumentReference>
+                    <cbc:ID>AUTOF202600035</cbc:ID>  <!-- BT-1 (Numéro de facture) : AUTOF202600035 -->
+                    <cbc:DocumentStatusCode>DETAIL</cbc:DocumentStatusCode>  <!-- EXT-FR-FE-163 (Sous-type de ligne de facture) : DETAIL -->
+               </cac:InvoiceDocumentReference>
+               <cac:BillingReferenceLine>
+                    <cbc:ID>20</cbc:ID>  <!-- EXT-FR-FE-162 (Identifiant de ligne Parent) : 20 -->
+               </cac:BillingReferenceLine>
+          </cac:BillingReference>
+          <cac:DocumentReference>
+               <cbc:ID schemeID="AFL">AGRI1_F202600035</cbc:ID>  <!-- BT-128 (Identifiant de l'objet à la ligne) : AGRI1_F202600035 -->
+               <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>  <!--  () : 130 -->
+          </cac:DocumentReference>
+          <cac:Item>
+               <cbc:Description>Mise à disposition</cbc:Description>  <!-- BT-154 (Description de l'article) : Mise à disposition -->
+               <cbc:Name>TANK</cbc:Name>  <!-- BT-153 (Nom de l'article) : TANK -->
+               <cac:ClassifiedTaxCategory>
+                    <cbc:ID>S</cbc:ID>  <!-- BT-151 (Code de type de TVA de l'article facturé) : S -->
+                    <cbc:Percent>20.00</cbc:Percent>  <!-- BT-152 (Taux de TVA de l'article facturé) : 20.00 -->
+                    <cbc:TaxExemptionReason>#AGRI1_F202600035#</cbc:TaxExemptionReason>  <!-- EXT-FR-FE-178 (Raison d'exemption de TVA en ligne) : #AGRI1_F202600035# -->
+                    <cac:TaxScheme>
+                         <cbc:ID>VAT</cbc:ID>  <!-- BT-151-0 (Type Taxe en code) : VAT -->
+                    </cac:TaxScheme>
+               </cac:ClassifiedTaxCategory>
+               <cac:ManufacturerParty>
+                    <cac:PartyLegalEntity>
+                         <cbc:CompanyID schemeID="0002">200000008</cbc:CompanyID>  <!-- EXT-FR-FE-167 (Identifiant d’enregistrement légal du vendeur à la ligne) : 200000008 -->
+                    </cac:PartyLegalEntity>
+               </cac:ManufacturerParty>
+          </cac:Item>
+          <cac:Price>
+               <cbc:PriceAmount currencyID="EUR">-3.0490</cbc:PriceAmount>  <!-- BT-146 (Prix net de l'article) : -3.0490 -->
+               <cbc:BaseQuantity unitCode="LTR">1.0000</cbc:BaseQuantity>  <!-- BT-149 (Quantité de base du prix de l'article) : 1.0000 -->
+               <cac:AllowanceCharge>
+                    <cbc:ChargeIndicator>false</cbc:ChargeIndicator>  <!--  () : false -->
+                    <cbc:Amount currencyID="EUR">0.0000</cbc:Amount>  <!-- BT-147 (Rabais sur le prix de l'article) : 0.0000 -->
+                    <cbc:BaseAmount  currencyID="EUR">-3.0490</cbc:BaseAmount>  <!-- BT-148 (Prix brut de l'article) : -3.0490 -->
+               </cac:AllowanceCharge>
+          </cac:Price>
+     </cac:InvoiceLine>
+</Invoice>
