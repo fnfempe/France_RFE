@@ -41,13 +41,15 @@
                  name="custom:is-valid-date-format"
                  as="xs:boolean">
       <xsl:param name="date" as="xs:string?"/>
+      <!-- V1.4.0.05 fix05 (issue #56) : normalize-space() avant découpage et number() au lieu de xs:decimal(), pour ne jamais lever FORG0001 sur une valeur non conforme -->
+      <xsl:variable name="normDate" select="normalize-space($date)"/>
       <!-- Vérifie le format AAAA-MM-JJ -->
       <xsl:variable name="isFormatValid"
-                    select="matches($date, '^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$')"/>
+                    select="matches($normDate, '^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$')"/>
       <!-- Extraction des composantes -->
-      <xsl:variable name="year" select="xs:decimal(substring($date, 1, 4))"/>
-      <xsl:variable name="month" select="xs:decimal(substring($date, 6, 2))"/>
-      <xsl:variable name="day" select="xs:decimal(substring($date, 9, 2))"/>
+      <xsl:variable name="year" select="number(substring($normDate, 1, 4))"/>
+      <xsl:variable name="month" select="number(substring($normDate, 6, 2))"/>
+      <xsl:variable name="day" select="number(substring($normDate, 9, 2))"/>
       <!-- Calcul année bissextile -->
       <xsl:variable name="isLeapYear"
                     select="($year mod 4 = 0 and $year mod 100 != 0) or ($year mod 400 = 0)"/>

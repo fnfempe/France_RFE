@@ -37,17 +37,18 @@
   <!-- BR-FR-03 : Année entre 2000 et 2099 et format date valide -->
   <xsl:function name="custom:is-valid-date-format" as="xs:boolean">
     <xsl:param name="date" as="xs:string?"/>
+    <!-- V1.4.0.05 fix05 (issue #56) : normalize-space() avant découpage et number() au lieu de xs:decimal(), pour ne jamais lever FORG0001 sur une valeur non conforme -->
     
     <!-- Tronque la date aux 8 premiers caractères -->
-    <xsl:variable name="shortDate" select="substring($date, 1, 8)"/>
+    <xsl:variable name="shortDate" select="substring(normalize-space($date), 1, 8)"/>
     
     <!-- Vérifie le format AAAAMMJJ -->
     <xsl:variable name="isFormatValid" select="matches($shortDate, '^20\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$')"/>
     
     <!-- Extraction des composantes -->
-    <xsl:variable name="year" select="xs:decimal(substring($shortDate, 1, 4))"/>
-    <xsl:variable name="month" select="xs:decimal(substring($shortDate, 5, 2))"/>
-    <xsl:variable name="day" select="xs:decimal(substring($shortDate, 7, 2))"/>
+    <xsl:variable name="year" select="number(substring($shortDate, 1, 4))"/>
+    <xsl:variable name="month" select="number(substring($shortDate, 5, 2))"/>
+    <xsl:variable name="day" select="number(substring($shortDate, 7, 2))"/>
     
     <!-- Calcul année bissextile -->
     <xsl:variable name="isLeapYear"
