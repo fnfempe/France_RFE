@@ -215,6 +215,26 @@
       exists($context/cbc:ProfileID)
       and normalize-space($context/cbc:ProfileID) = ('S9', 'B9', 'M9')"/>
   </xsl:function>
+  <!-- V1.4.0.05 fix05 (issue #58) : cast decimal garde.
+       custom:dec rend la valeur decimale d'un montant, ou () si ce montant est
+       absent, vide, en double, ou non castable (separateur virgule...).
+       fix04 a remplace number() par xs:decimal() dans BR-FR-CO-09 et BR-FR-MV-05
+       / -09 / -10 : une valeur mal formee n'y rend plus NaN mais interrompt la
+       transformation, et le rapport SVRL sort tronque - BR-FR-DEC-01 comprise,
+       alors que c'est precisement la regle qui decrit ce defaut.
+       Avec la garde, la regle retombe en failed-assert et le rapport est entier. -->
+  <xsl:function name="custom:dec" as="xs:decimal?">
+    <xsl:param name="value" as="item()*"/>
+    <xsl:sequence select="if (count($value) = 1 and string($value) castable as xs:decimal) then xs:decimal(string($value)) else ()"/>
+  </xsl:function>
+
+  <!-- Idem sur une sequence, pour les sum() de montants non types : sum() atomise
+       en xs:double et leve FORG0001 de son cote. -->
+  <xsl:function name="custom:decs" as="xs:decimal*">
+    <xsl:param name="value" as="item()*"/>
+    <xsl:sequence select="for $v in $value return custom:dec($v)"/>
+  </xsl:function>
+
 
 
   <!-- Règles de validation UBL -->
@@ -1176,13 +1196,13 @@
       <let name="payableAmount" value="cac:LegalMonetaryTotal/cbc:PayableAmount"/>
       <let name="dueDate" value="cbc:DueDate | cac:PaymentMeans/cbc:PaymentDueDate"/> <!-- V1.4.0 Correction Xpath for UBL Credit Note) -->
       
-      <assert test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($paidAmount) = xs:decimal($grandTotal))"
+      <assert test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (custom:dec($paidAmount) = custom:dec($grandTotal))"
         flag="warning" id="BR-FR-CO-09_BT-23-1">
         [BR-FR-CO-09/BT-23] : Si le cadre de facturation (BT-23) est B2, S2 ou M2 (facture déjà payée), alors le montant déjà payé (BT-113) doit être égal au montant total TTC (BT-112).
         Montant payé : <value-of select="$paidAmount"/>, Montant total : <value-of select="$grandTotal"/>.
       </assert>
       
-      <assert test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($payableAmount) = 0)"
+      <assert test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (custom:dec($payableAmount) = 0)"
         flag="warning" id="BR-FR-CO-09_BT-23-2">
         [BR-FR-CO-09/BT-23] : Si le cadre de facturation (BT-23) est B2, S2 ou M2, alors le net à payer (BT-115) doit être égal à 0.
         Net à payer : <value-of select="$payableAmount"/>.
@@ -1770,11 +1790,11 @@
     <rule context="(ubl:Invoice/cac:InvoiceLine|cn:CreditNote/cac:CreditNoteLine)/cac:BillingReference[(cac:InvoiceDocumentReference/cbc:ID = $invoiceID)][(cac:InvoiceDocumentReference/cbc:DocumentStatusCode = 'GROUP') and not(cac:BillingReferenceLine/cbc:ID)]">      
 
       <let name="grouplineID" value="normalize-space(../cbc:ID)"/>
-      <let name="sumsubline" value="sum((../../cac:InvoiceLine| ../../cac:CreditNoteLine)[cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID  and cac:InvoiceDocumentReference/cbc:DocumentStatusCode != 'INFORMATION' and cac:BillingReferenceLine/cbc:ID = $grouplineID]]/cbc:LineExtensionAmount)"/>
+      <let name="sumsubline" value="sum(custom:decs((../../cac:InvoiceLine| ../../cac:CreditNoteLine)[cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID  and cac:InvoiceDocumentReference/cbc:DocumentStatusCode != 'INFORMATION' and cac:BillingReferenceLine/cbc:ID = $grouplineID]]/cbc:LineExtensionAmount))"/>
       <let name="numberline" value="count((../../cac:InvoiceLine| ../../cac:CreditNoteLine)[cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID  and cac:InvoiceDocumentReference/cbc:DocumentStatusCode != 'INFORMATION' and cac:BillingReferenceLine/cbc:ID = $grouplineID]]/cbc:LineExtensionAmount)"/>
       
       <assert test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) 
-        or (abs(xs:decimal(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)"
+        or (abs(custom:dec(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)"
         flag="fatal"
         id="BR-FR-MV-05_EXT-FR-FE-BG-12">
         [BR-FR-MV-05/EXT-FR-FE-BG-12] : Num Fact : <value-of select='$invoiceID'/> - Ligne GROUP : <value-of select='$grouplineID'/>, Somme Sous lignes : <value-of select='$sumsubline'/>, Nbre sous-lignes: <value-of select='$numberline'/>. Valeur actuelle : "<value-of select='../cbc:LineExtensionAmount'/>".
@@ -1848,11 +1868,11 @@
     <rule context="(ubl:Invoice/cac:InvoiceLine|cn:CreditNote/cac:CreditNoteLine)/cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID][(cac:InvoiceDocumentReference/cbc:DocumentStatusCode = 'GROUP') and not(cac:BillingReferenceLine/cbc:ID)]">
       
       <let name="numfact" value="normalize-space(../cac:DocumentReference[cbc:DocumentTypeCode = '130']/cbc:ID[@schemeID = 'AFL'])"/>
-      <let name="sumvat" value="sum(../../cac:TaxTotal/cac:TaxSubtotal[cac:TaxCategory/cac:TaxScheme/cbc:ID ='VAT' and starts-with(cac:TaxCategory/cbc:TaxExemptionReason,concat('#',$numfact,'#'))]/cbc:TaxAmount)"/>   
+      <let name="sumvat" value="sum(custom:decs(../../cac:TaxTotal/cac:TaxSubtotal[cac:TaxCategory/cac:TaxScheme/cbc:ID ='VAT' and starts-with(cac:TaxCategory/cbc:TaxExemptionReason,concat('#',$numfact,'#'))]/cbc:TaxAmount))"/>   
       <let name="invcurrency" value="../../cbc:DocumentCurrencyCode"/>
       
       <assert test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) 
-        or (abs(xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"
+        or (abs(custom:dec(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"
         flag="fatal"
         id="BR-FR-MV-09_EXT-FR-FE-181">
         [BR-FR-MV-09/EXT-FR-FE-181] : Id Line Group : <value-of select='../cbc:ID'/>, Numfact: <value-of select='$numfact'/>, Total TVA : <value-of select='../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]'/>, Somme TVA : <value-of select='$sumvat'/>.
@@ -1875,9 +1895,9 @@
       <assert test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) 
         or not(../cbc:TaxInclusiveLineExtensionAmount) 
         or (normalize-space(../cbc:TaxInclusiveLineExtensionAmount) != '' 
-        and abs(xs:decimal(../cbc:TaxInclusiveLineExtensionAmount) 
-        - xs:decimal(../cbc:LineExtensionAmount) 
-        - xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"      
+        and abs(custom:dec(../cbc:TaxInclusiveLineExtensionAmount) 
+        - custom:dec(../cbc:LineExtensionAmount) 
+        - custom:dec(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"      
         flag="fatal"
         id="BR-FR-MV-10_EXT-FR-FE-184">
         [BR-FR-MV-10/EXT-FR-FE-184] : Id Line Group : <value-of select='../cbc:ID'/>, nb sous-ligne : <value-of select='$nbligne'/>, 

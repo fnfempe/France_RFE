@@ -177,6 +177,18 @@
       <xsl:param name="context" as="element()?"/>
       <xsl:sequence select="       exists($context/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID)       and normalize-space($context/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID) = ('S9', 'B9', 'M9')"/>
    </xsl:function>
+   <xsl:function xmlns="http://purl.oclc.org/dsdl/schematron"
+                 name="custom:dec"
+                 as="xs:decimal?">
+      <xsl:param name="value" as="item()*"/>
+      <xsl:sequence select="if (count($value) = 1 and string($value) castable as xs:decimal) then xs:decimal(string($value)) else ()"/>
+   </xsl:function>
+   <xsl:function xmlns="http://purl.oclc.org/dsdl/schematron"
+                 name="custom:decs"
+                 as="xs:decimal*">
+      <xsl:param name="value" as="item()*"/>
+      <xsl:sequence select="for $v in $value return custom:dec($v)"/>
+   </xsl:function>
    <!--DEFAULT RULES-->
 
    <!--MODE: SCHEMATRON-SELECT-FULL-PATH-->
@@ -3685,10 +3697,10 @@
                     select="rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime/udt:DateTimeString"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not($isPaidMode) or (xs:decimal($paidAmount) = xs:decimal($totalAmount))"/>
+         <xsl:when test="not($isPaidMode) or (custom:dec($paidAmount) = custom:dec($totalAmount))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not($isPaidMode) or (xs:decimal($paidAmount) = xs:decimal($totalAmount))">
+                                test="not($isPaidMode) or (custom:dec($paidAmount) = custom:dec($totalAmount))">
                <xsl:attribute name="id">BR-FR-CO-09_BT-23-1</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
@@ -3707,10 +3719,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not($isPaidMode) or (xs:decimal($dueAmount) = 0)"/>
+         <xsl:when test="not($isPaidMode) or (custom:dec($dueAmount) = 0)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not($isPaidMode) or (xs:decimal($dueAmount) = 0)">
+                                test="not($isPaidMode) or (custom:dec($dueAmount) = 0)">
                <xsl:attribute name="id">BR-FR-CO-09_BT-23-2</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
@@ -5349,15 +5361,15 @@
       <xsl:variable name="grouplineID"
                     select="normalize-space(./ram:AssociatedDocumentLineDocument/ram:LineID)"/>
       <xsl:variable name="sumsubline"
-                    select="sum(../ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:ParentLineID= $grouplineID and ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode != 'INFORMATION']         /ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)"/>
+                    select="sum(custom:decs(../ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:ParentLineID= $grouplineID and ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode != 'INFORMATION']         /ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount))"/>
       <xsl:variable name="numberline"
                     select="count(../ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:ParentLineID= $grouplineID  and ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode != 'INFORMATION']         /ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice))          or (abs(xs:decimal(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) - $sumsubline) &lt;= 0.01 * $numberline)"/>
+         <xsl:when test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice))          or (abs(custom:dec(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) - $sumsubline) &lt;= 0.01 * $numberline)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) or (abs(xs:decimal(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) - $sumsubline) &lt;= 0.01 * $numberline)">
+                                test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) or (abs(custom:dec(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) - $sumsubline) &lt;= 0.01 * $numberline)">
                <xsl:attribute name="id">BR-FR-MV-05_EXT-FR-FE-BG-12</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -5526,15 +5538,15 @@
       <xsl:variable name="numfact"
                     select="normalize-space(./ram:SpecifiedLineTradeSettlement/ram:AdditionalReferencedDocument[(ram:ReferenceTypeCode = 'AFL') and (ram:TypeCode = '130')]/ram:IssuerAssignedID)"/>
       <xsl:variable name="sumvat"
-                    select="sum(../ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[(ram:TypeCode = 'VAT') and starts-with(ram:ExemptionReason,concat('#',$numfact,'#'))]/ram:CalculatedAmount)"/>
+                    select="sum(custom:decs(../ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[(ram:TypeCode = 'VAT') and starts-with(ram:ExemptionReason,concat('#',$numfact,'#'))]/ram:CalculatedAmount))"/>
       <xsl:variable name="invcurrency"
                     select="../ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice))          or (abs(xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"/>
+         <xsl:when test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice))          or (abs(custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) or (abs(xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)">
+                                test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) or (abs(custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)">
                <xsl:attribute name="id">BR-FR-MV-09_EXT-FR-FE-181</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -5577,10 +5589,10 @@
                     select="count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:ParentLineID = $parentlineID and ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = ('DETAIL', 'GROUP')])"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice))          or not(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount)         or (normalize-space(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) != ''          and abs(xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount)          - xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)          - xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"/>
+         <xsl:when test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice))          or not(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount)         or (normalize-space(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) != ''          and abs(custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount)          - custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)          - custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) or not(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) or (normalize-space(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) != '' and abs(xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) - xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) - xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)">
+                                test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) or not(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) or (normalize-space(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) != '' and abs(custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) - custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) - custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)">
                <xsl:attribute name="id">BR-FR-MV-10_EXT-FR-FE-184</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
