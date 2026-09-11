@@ -176,6 +176,18 @@
       <xsl:param name="context" as="element()?"/>
       <xsl:sequence select="       exists($context/cbc:ProfileID)       and normalize-space($context/cbc:ProfileID) = ('S9', 'B9', 'M9')"/>
    </xsl:function>
+   <xsl:function xmlns="http://purl.oclc.org/dsdl/schematron"
+                 name="custom:dec"
+                 as="xs:decimal?">
+      <xsl:param name="value" as="item()*"/>
+      <xsl:sequence select="if (count($value) = 1 and string($value) castable as xs:decimal) then xs:decimal(string($value)) else ()"/>
+   </xsl:function>
+   <xsl:function xmlns="http://purl.oclc.org/dsdl/schematron"
+                 name="custom:decs"
+                 as="xs:decimal*">
+      <xsl:param name="value" as="item()*"/>
+      <xsl:sequence select="for $v in $value return custom:dec($v)"/>
+   </xsl:function>
    <!--DEFAULT RULES-->
 
    <!--MODE: SCHEMATRON-SELECT-FULL-PATH-->
@@ -3823,10 +3835,10 @@
                     select="cbc:DueDate | cac:PaymentMeans/cbc:PaymentDueDate"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($paidAmount) = xs:decimal($grandTotal))"/>
+         <xsl:when test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (custom:dec($paidAmount) = custom:dec($grandTotal))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($paidAmount) = xs:decimal($grandTotal))">
+                                test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (custom:dec($paidAmount) = custom:dec($grandTotal))">
                <xsl:attribute name="id">BR-FR-CO-09_BT-23-1</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
@@ -3845,10 +3857,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($payableAmount) = 0)"/>
+         <xsl:when test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (custom:dec($payableAmount) = 0)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (xs:decimal($payableAmount) = 0)">
+                                test="not($billingContext = 'B2' or $billingContext = 'S2' or $billingContext = 'M2') or (custom:dec($payableAmount) = 0)">
                <xsl:attribute name="id">BR-FR-CO-09_BT-23-2</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
@@ -5508,15 +5520,15 @@
                        context="(ubl:Invoice/cac:InvoiceLine|cn:CreditNote/cac:CreditNoteLine)/cac:BillingReference[(cac:InvoiceDocumentReference/cbc:ID = $invoiceID)][(cac:InvoiceDocumentReference/cbc:DocumentStatusCode = 'GROUP') and not(cac:BillingReferenceLine/cbc:ID)]"/>
       <xsl:variable name="grouplineID" select="normalize-space(../cbc:ID)"/>
       <xsl:variable name="sumsubline"
-                    select="sum((../../cac:InvoiceLine| ../../cac:CreditNoteLine)[cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID  and cac:InvoiceDocumentReference/cbc:DocumentStatusCode != 'INFORMATION' and cac:BillingReferenceLine/cbc:ID = $grouplineID]]/cbc:LineExtensionAmount)"/>
+                    select="sum(custom:decs((../../cac:InvoiceLine| ../../cac:CreditNoteLine)[cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID  and cac:InvoiceDocumentReference/cbc:DocumentStatusCode != 'INFORMATION' and cac:BillingReferenceLine/cbc:ID = $grouplineID]]/cbc:LineExtensionAmount))"/>
       <xsl:variable name="numberline"
                     select="count((../../cac:InvoiceLine| ../../cac:CreditNoteLine)[cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID  and cac:InvoiceDocumentReference/cbc:DocumentStatusCode != 'INFORMATION' and cac:BillingReferenceLine/cbc:ID = $grouplineID]]/cbc:LineExtensionAmount)"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or (abs(xs:decimal(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)"/>
+         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or (abs(custom:dec(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or (abs(xs:decimal(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)">
+                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or (abs(custom:dec(../cbc:LineExtensionAmount) - $sumsubline) &lt;= 0.01 * $numberline)">
                <xsl:attribute name="id">BR-FR-MV-05_EXT-FR-FE-BG-12</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -5687,14 +5699,14 @@
       <xsl:variable name="numfact"
                     select="normalize-space(../cac:DocumentReference[cbc:DocumentTypeCode = '130']/cbc:ID[@schemeID = 'AFL'])"/>
       <xsl:variable name="sumvat"
-                    select="sum(../../cac:TaxTotal/cac:TaxSubtotal[cac:TaxCategory/cac:TaxScheme/cbc:ID ='VAT' and starts-with(cac:TaxCategory/cbc:TaxExemptionReason,concat('#',$numfact,'#'))]/cbc:TaxAmount)"/>
+                    select="sum(custom:decs(../../cac:TaxTotal/cac:TaxSubtotal[cac:TaxCategory/cac:TaxScheme/cbc:ID ='VAT' and starts-with(cac:TaxCategory/cbc:TaxExemptionReason,concat('#',$numfact,'#'))]/cbc:TaxAmount))"/>
       <xsl:variable name="invcurrency" select="../../cbc:DocumentCurrencyCode"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or (abs(xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"/>
+         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or (abs(custom:dec(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or (abs(xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)">
+                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or (abs(custom:dec(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)">
                <xsl:attribute name="id">BR-FR-MV-09_EXT-FR-FE-181</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -5735,10 +5747,10 @@
                     select="count((../../cac:InvoiceLine| ../../cac:CreditNoteLine)/cac:BillingReference[cac:InvoiceDocumentReference/cbc:ID = $invoiceID][cac:InvoiceDocumentReference/cbc:DocumentStatusCode = ('DETAIL', 'GROUP') and cac:BillingReferenceLine/cbc:ID = $parentlineID])"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or not(../cbc:TaxInclusiveLineExtensionAmount)          or (normalize-space(../cbc:TaxInclusiveLineExtensionAmount) != ''          and abs(xs:decimal(../cbc:TaxInclusiveLineExtensionAmount)          - xs:decimal(../cbc:LineExtensionAmount)          - xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"/>
+         <xsl:when test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote))          or not(../cbc:TaxInclusiveLineExtensionAmount)          or (normalize-space(../cbc:TaxInclusiveLineExtensionAmount) != ''          and abs(custom:dec(../cbc:TaxInclusiveLineExtensionAmount)          - custom:dec(../cbc:LineExtensionAmount)          - custom:dec(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or not(../cbc:TaxInclusiveLineExtensionAmount) or (normalize-space(../cbc:TaxInclusiveLineExtensionAmount) != '' and abs(xs:decimal(../cbc:TaxInclusiveLineExtensionAmount) - xs:decimal(../cbc:LineExtensionAmount) - xs:decimal(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)">
+                                test="not(custom:isSpecialContract(/ubl:Invoice|/cn:CreditNote)) or not(../cbc:TaxInclusiveLineExtensionAmount) or (normalize-space(../cbc:TaxInclusiveLineExtensionAmount) != '' and abs(custom:dec(../cbc:TaxInclusiveLineExtensionAmount) - custom:dec(../cbc:LineExtensionAmount) - custom:dec(../cac:TaxTotal/cbc:TaxAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)">
                <xsl:attribute name="id">BR-FR-MV-10_EXT-FR-FE-184</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">

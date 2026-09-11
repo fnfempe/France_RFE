@@ -215,6 +215,26 @@
       exists($context/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID)
       and normalize-space($context/rsm:ExchangedDocumentContext/ram:BusinessProcessSpecifiedDocumentContextParameter/ram:ID) = ('S9', 'B9', 'M9')"/>
   </xsl:function>
+  <!-- V1.4.0.05 fix05 (issue #58) : cast decimal garde.
+       custom:dec rend la valeur decimale d'un montant, ou () si ce montant est
+       absent, vide, en double, ou non castable (separateur virgule...).
+       fix04 a remplace number() par xs:decimal() dans BR-FR-CO-09 et BR-FR-MV-05
+       / -09 / -10 : une valeur mal formee n'y rend plus NaN mais interrompt la
+       transformation, et le rapport SVRL sort tronque - BR-FR-DEC-01 comprise,
+       alors que c'est precisement la regle qui decrit ce defaut.
+       Avec la garde, la regle retombe en failed-assert et le rapport est entier. -->
+  <xsl:function name="custom:dec" as="xs:decimal?">
+    <xsl:param name="value" as="item()*"/>
+    <xsl:sequence select="if (count($value) = 1 and string($value) castable as xs:decimal) then xs:decimal(string($value)) else ()"/>
+  </xsl:function>
+
+  <!-- Idem sur une sequence, pour les sum() de montants non types : sum() atomise
+       en xs:double et leve FORG0001 de son cote. -->
+  <xsl:function name="custom:decs" as="xs:decimal*">
+    <xsl:param name="value" as="item()*"/>
+    <xsl:sequence select="for $v in $value return custom:dec($v)"/>
+  </xsl:function>
+
 
 
   <!-- Règles de validation CII -->
@@ -1162,12 +1182,12 @@
       <let name="dueAmount" value="rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:DuePayableAmount"/>
       <let name="dueDate" value="rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime/udt:DateTimeString"/>
       
-      <assert test="not($isPaidMode) or (xs:decimal($paidAmount) = xs:decimal($totalAmount))" flag="fatal" id="BR-FR-CO-09_BT-23-1">
+      <assert test="not($isPaidMode) or (custom:dec($paidAmount) = custom:dec($totalAmount))" flag="fatal" id="BR-FR-CO-09_BT-23-1">
         BR-FR-CO-09/BT-23 : Si le cadre de facturation (BT-23) est B2, S2 ou M2 (facture déjà payée), alors le montant déjà payé (BT-113) doit être égal au montant total TTC (BT-112).
         Montant payé : <value-of select="$paidAmount"/>, Montant total : <value-of select="$totalAmount"/>.
       </assert>
       
-      <assert test="not($isPaidMode) or (xs:decimal($dueAmount) = 0)" flag="fatal" id="BR-FR-CO-09_BT-23-2">
+      <assert test="not($isPaidMode) or (custom:dec($dueAmount) = 0)" flag="fatal" id="BR-FR-CO-09_BT-23-2">
         BR-FR-CO-09/BT-23 : Si le cadre de facturation (BT-23) est B2, S2 ou M2, alors le net à payer (BT-115) doit être égal à 0.
         Net à payer : <value-of select="$dueAmount"/>.
       </assert>
@@ -1697,13 +1717,13 @@
       and not(ram:AssociatedDocumentLineDocument/ram:ParentLineID)]">
       
       <let name="grouplineID" value="normalize-space(./ram:AssociatedDocumentLineDocument/ram:LineID)"/>
-      <let name="sumsubline" value="sum(../ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:ParentLineID= $grouplineID and ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode != 'INFORMATION']
-        /ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)"/>
+      <let name="sumsubline" value="sum(custom:decs(../ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:ParentLineID= $grouplineID and ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode != 'INFORMATION']
+        /ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount))"/>
       <let name="numberline" value="count(../ram:IncludedSupplyChainTradeLineItem[ram:AssociatedDocumentLineDocument/ram:ParentLineID= $grouplineID  and ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode != 'INFORMATION']
         /ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)"/>
       
       <assert test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) 
-        or (abs(xs:decimal(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) - $sumsubline) &lt;= 0.01 * $numberline)"
+        or (abs(custom:dec(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) - $sumsubline) &lt;= 0.01 * $numberline)"
         flag="fatal"
         id="BR-FR-MV-05_EXT-FR-FE-BG-12">
         BR-FR-MV-05/EXT-FR-FE-BG-12 : Ligne GROUP : <value-of select='$grouplineID'/>, Somme Sous lignes : <value-of select='$sumsubline'/>, Nbre sous-lignes: <value-of select='$numberline'/>. Valeur actuelle : "<value-of select='ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount'/>". 
@@ -1775,11 +1795,11 @@
       and not(ram:AssociatedDocumentLineDocument/ram:ParentLineID)]">
       
       <let name="numfact" value="normalize-space(./ram:SpecifiedLineTradeSettlement/ram:AdditionalReferencedDocument[(ram:ReferenceTypeCode = 'AFL') and (ram:TypeCode = '130')]/ram:IssuerAssignedID)"/>
-      <let name="sumvat" value="sum(../ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[(ram:TypeCode = 'VAT') and starts-with(ram:ExemptionReason,concat('#',$numfact,'#'))]/ram:CalculatedAmount)"/>   
+      <let name="sumvat" value="sum(custom:decs(../ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[(ram:TypeCode = 'VAT') and starts-with(ram:ExemptionReason,concat('#',$numfact,'#'))]/ram:CalculatedAmount))"/>   
       <let name="invcurrency" value="../ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode"/>
       
       <assert test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) 
-        or (abs(xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"
+        or (abs(custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]) - $sumvat) &lt;= 0.01)"
         flag="fatal"
         id="BR-FR-MV-09_EXT-FR-FE-181">
         BR-FR-MV-09/EXT-FR-FE-181 : Id Line Group : <value-of select='./ram:AssociatedDocumentLineDocument/ram:LineID'/>, Numfact: <value-of select='$numfact'/>, Total TVA : <value-of select='./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency]'/>, Somme TVA : <value-of select='$sumvat'/>. 
@@ -1803,9 +1823,9 @@
       <assert test="not(custom:isSpecialContract(/rsm:CrossIndustryInvoice)) 
         or not(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount)
         or (normalize-space(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) != '' 
-        and abs(xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) 
-        - xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) 
-        - xs:decimal(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"      
+        and abs(custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:GrandTotalAmount) 
+        - custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) 
+        - custom:dec(./ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:TaxTotalAmount[@currencyID = $invcurrency])) &lt;= 0.01 * $nbligne)"      
         flag="fatal"
         id="BR-FR-MV-10_EXT-FR-FE-184">
         BR-FR-MV-10/EXT-FR-FE-184 : Id Line Group : <value-of select='./ram:AssociatedDocumentLineDocument/ram:LineID'/>, nb sous-ligne : <value-of select='$nbligne'/>, 
