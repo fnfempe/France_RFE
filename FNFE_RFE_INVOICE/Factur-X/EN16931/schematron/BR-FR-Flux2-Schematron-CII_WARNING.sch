@@ -1924,5 +1924,21 @@
       
     </rule>
   </pattern>
+  <!-- Issue #92 : XP Z12-012 v1.4 §4.4.4 Gestion des avoirs -->
+  <pattern id="BR-FR-CO-16">
+    <title>BR-FR-CO-16 — Montants totaux HT (BT-109) et TTC (BT-112) positifs ou nuls pour un avoir (BT-3 = 261, 262, 381, 396, 502, 503)</title>
+
+    <rule context="rsm:CrossIndustryInvoice">
+      <let name="typeCode" value="rsm:ExchangedDocument/ram:TypeCode"/>
+      <let name="taxBasisTotal" value="rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxBasisTotalAmount"/>
+      <let name="grandTotal" value="rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:GrandTotalAmount"/>
+
+      <!-- Seuls les montants au format BR-FR-DEC-01 sont testés : un montant absent (BR-12, BR-13) ou mal formé (BR-FR-DEC-01) ne produit pas de seconde erreur -->
+      <assert test="not($typeCode = ('261', '262', '381', '396', '502', '503')) or (every $amount in ($taxBasisTotal | $grandTotal)[custom:is-valid-decimal-19-2(normalize-space(.))] satisfies xs:decimal(normalize-space($amount)) ge 0)" flag="warning" id="BR-FR-CO-16_BT-3">
+        BR-FR-CO-16/BT-3 : Un avoir (BT-3 = 261, 262, 381, 396, 502 ou 503) ne peut pas avoir de montant total HT (BT-109) ou TTC (BT-112) négatif : pour annuler un avoir, émettre une facture qui le référence (XP Z12-012 §4.4.4).
+        Valeurs actuelles : BT-3="<value-of select="$typeCode"/>", BT-109="<value-of select="$taxBasisTotal"/>", BT-112="<value-of select="$grandTotal"/>".
+      </assert>
+    </rule>
+  </pattern>
   
 </schema>

@@ -848,6 +848,15 @@
             <xsl:apply-templates/>
          </svrl:active-pattern>
          <xsl:apply-templates select="/" mode="M82"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:attribute name="id">BR-FR-CO-16</xsl:attribute>
+            <xsl:attribute name="name">BR-FR-CO-16 — Montants totaux HT (BT-109) et TTC (BT-112) positifs ou nuls pour un avoir (BT-3 = 261, 262, 381, 396, 502, 503)</xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M83"/>
       </svrl:schematron-output>
    </xsl:template>
    <!--SCHEMATRON PATTERNS-->
@@ -6021,5 +6030,46 @@
    <xsl:template match="text()" priority="-1" mode="M82"/>
    <xsl:template match="@*|node()" priority="-2" mode="M82">
       <xsl:apply-templates select="*" mode="M82"/>
+   </xsl:template>
+   <!--PATTERN BR-FR-CO-16BR-FR-CO-16 — Montants totaux HT (BT-109) et TTC (BT-112) positifs ou nuls pour un avoir (BT-3 = 261, 262, 381, 396, 502, 503)-->
+   <svrl:text xmlns:svrl="http://purl.oclc.org/dsdl/svrl">BR-FR-CO-16 — Montants totaux HT (BT-109) et TTC (BT-112) positifs ou nuls pour un avoir (BT-3 = 261, 262, 381, 396, 502, 503)</svrl:text>
+   <!--RULE -->
+   <xsl:template match="ubl:Invoice | cn:CreditNote" priority="1000" mode="M83">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="ubl:Invoice | cn:CreditNote"/>
+      <xsl:variable name="typeCode" select="cbc:InvoiceTypeCode | cbc:CreditNoteTypeCode"/>
+      <xsl:variable name="taxExclusiveAmount"
+                    select="cac:LegalMonetaryTotal/cbc:TaxExclusiveAmount"/>
+      <xsl:variable name="taxInclusiveAmount"
+                    select="cac:LegalMonetaryTotal/cbc:TaxInclusiveAmount"/>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="not($typeCode = ('261', '262', '381', '396', '502', '503')) or (every $amount in ($taxExclusiveAmount | $taxInclusiveAmount)[custom:is-valid-decimal-19-2(normalize-space(.))] satisfies xs:decimal(normalize-space($amount)) ge 0)"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="not($typeCode = ('261', '262', '381', '396', '502', '503')) or (every $amount in ($taxExclusiveAmount | $taxInclusiveAmount)[custom:is-valid-decimal-19-2(normalize-space(.))] satisfies xs:decimal(normalize-space($amount)) ge 0)">
+               <xsl:attribute name="id">BR-FR-CO-16_BT-3</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>
+        [BR-FR-CO-16/BT-3] : Un avoir (BT-3 = 261, 262, 381, 396, 502 ou 503) ne peut pas avoir de montant total HT (BT-109) ou TTC (BT-112) négatif : pour annuler un avoir, émettre une facture qui le référence (XP Z12-012 §4.4.4).
+        Valeurs actuelles : BT-3="<xsl:text/>
+                  <xsl:value-of select="$typeCode"/>
+                  <xsl:text/>", BT-109="<xsl:text/>
+                  <xsl:value-of select="$taxExclusiveAmount"/>
+                  <xsl:text/>", BT-112="<xsl:text/>
+                  <xsl:value-of select="$taxInclusiveAmount"/>
+                  <xsl:text/>".
+      </svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M83"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M83"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M83">
+      <xsl:apply-templates select="*" mode="M83"/>
    </xsl:template>
 </xsl:stylesheet>

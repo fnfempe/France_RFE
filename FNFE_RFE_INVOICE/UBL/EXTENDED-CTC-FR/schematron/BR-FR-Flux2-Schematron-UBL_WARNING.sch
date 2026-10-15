@@ -1993,5 +1993,21 @@
       
     </rule>
   </pattern>
+  <!-- Issue #92 : XP Z12-012 v1.4 §4.4.4 Gestion des avoirs -->
+  <pattern id="BR-FR-CO-16">
+    <title>BR-FR-CO-16 — Montants totaux HT (BT-109) et TTC (BT-112) positifs ou nuls pour un avoir (BT-3 = 261, 262, 381, 396, 502, 503)</title>
+
+    <rule context="ubl:Invoice | cn:CreditNote">
+      <let name="typeCode" value="cbc:InvoiceTypeCode | cbc:CreditNoteTypeCode"/>
+      <let name="taxExclusiveAmount" value="cac:LegalMonetaryTotal/cbc:TaxExclusiveAmount"/>
+      <let name="taxInclusiveAmount" value="cac:LegalMonetaryTotal/cbc:TaxInclusiveAmount"/>
+
+      <!-- Seuls les montants au format BR-FR-DEC-01 sont testés : un montant absent (BR-12, BR-13) ou mal formé (BR-FR-DEC-01) ne produit pas de seconde erreur -->
+      <assert test="not($typeCode = ('261', '262', '381', '396', '502', '503')) or (every $amount in ($taxExclusiveAmount | $taxInclusiveAmount)[custom:is-valid-decimal-19-2(normalize-space(.))] satisfies xs:decimal(normalize-space($amount)) ge 0)" flag="warning" id="BR-FR-CO-16_BT-3">
+        [BR-FR-CO-16/BT-3] : Un avoir (BT-3 = 261, 262, 381, 396, 502 ou 503) ne peut pas avoir de montant total HT (BT-109) ou TTC (BT-112) négatif : pour annuler un avoir, émettre une facture qui le référence (XP Z12-012 §4.4.4).
+        Valeurs actuelles : BT-3="<value-of select="$typeCode"/>", BT-109="<value-of select="$taxExclusiveAmount"/>", BT-112="<value-of select="$taxInclusiveAmount"/>".
+      </assert>
+    </rule>
+  </pattern>
   
 </schema>
