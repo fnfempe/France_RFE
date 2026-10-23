@@ -1994,4 +1994,27 @@
     </rule>
   </pattern>
   
+
+  <pattern id="BR-FR-CO-17">
+    <title>BR-FR-CO-17 — Line net amount coherence (warning)</title>
+    <!-- Warning only. Price-level AllowanceCharge (BT-147) is not a line charge. -->
+    <rule context="(ubl:Invoice/cac:InvoiceLine | cn:CreditNote/cac:CreditNoteLine)[not(cac:BillingReference/cac:InvoiceDocumentReference/cbc:DocumentStatusCode = ('GROUP', 'INFORMATION'))]">
+      <let name="qtyNode" value="cbc:InvoicedQuantity | cbc:CreditedQuantity"/>
+      <let name="lineNode" value="cbc:LineExtensionAmount"/>
+      <let name="priceNode" value="cac:Price/cbc:PriceAmount"/>
+      <let name="qtyOk" value="count($qtyNode) = 1 and $qtyNode castable as xs:decimal"/>
+      <let name="lineOk" value="count($lineNode) = 1 and $lineNode castable as xs:decimal"/>
+      <let name="priceOk" value="count($priceNode) = 1 and $priceNode castable as xs:decimal"/>
+      <let name="qty" value="if ($qtyOk) then xs:decimal($qtyNode) else 0"/>
+      <let name="net" value="if ($priceOk) then xs:decimal($priceNode) else 0"/>
+      <let name="base" value="if (cac:Price/cbc:BaseQuantity castable as xs:decimal and xs:decimal(cac:Price/cbc:BaseQuantity) != 0) then xs:decimal(cac:Price/cbc:BaseQuantity) else 1"/>
+      <let name="allowance" value="sum(cac:AllowanceCharge[normalize-space(cbc:ChargeIndicator) = 'false'][cbc:Amount castable as xs:decimal]/xs:decimal(cbc:Amount))"/>
+      <let name="charge" value="sum(cac:AllowanceCharge[normalize-space(cbc:ChargeIndicator) = 'true'][cbc:Amount castable as xs:decimal]/xs:decimal(cbc:Amount))"/>
+      <let name="declared" value="if ($lineOk) then xs:decimal($lineNode) else 0"/>
+      <let name="expected" value="($net div $base) * $qty - $allowance + $charge"/>
+      <assert test="not($qtyOk and $lineOk and $priceOk) or abs($declared - $expected) le 0.01" flag="warning" id="BR-FR-CO-17_BT-131">
+        BR-FR-CO-17/BT-131 : Ligne <value-of select="cbc:ID"/> : BT-131 (<value-of select="$declared"/>) s'écarte de plus de 0,01 du calcul BT-129 × (BT-146 / BT-149) + Σ BT-141 − Σ BT-136 (= <value-of select="round($expected * 100) div 100"/>). Avertissement : la facture n'est pas rejetée. Vérifier qu'une charge n'est pas incluse dans le prix net et redéclarée en charge de ligne.
+      </assert>
+    </rule>
+  </pattern>
 </schema>

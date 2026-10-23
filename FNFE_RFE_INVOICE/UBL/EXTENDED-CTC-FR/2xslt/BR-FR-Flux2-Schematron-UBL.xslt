@@ -848,6 +848,15 @@
             <xsl:apply-templates/>
          </svrl:active-pattern>
          <xsl:apply-templates select="/" mode="M82"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:attribute name="id">BR-FR-CO-17</xsl:attribute>
+            <xsl:attribute name="name">BR-FR-CO-17 — Line net amount coherence (warning)</xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M83"/>
       </svrl:schematron-output>
    </xsl:template>
    <!--SCHEMATRON PATTERNS-->
@@ -6021,5 +6030,47 @@
    <xsl:template match="text()" priority="-1" mode="M82"/>
    <xsl:template match="@*|node()" priority="-2" mode="M82">
       <xsl:apply-templates select="*" mode="M82"/>
+   </xsl:template>
+   <!--PATTERN BR-FR-CO-17 — Line net amount coherence (warning)-->
+   <svrl:text xmlns:svrl="http://purl.oclc.org/dsdl/svrl">BR-FR-CO-17 — Line net amount coherence (warning)</svrl:text>
+   <!--RULE -->
+   <xsl:template match="(ubl:Invoice/cac:InvoiceLine | cn:CreditNote/cac:CreditNoteLine)[not(cac:BillingReference/cac:InvoiceDocumentReference/cbc:DocumentStatusCode = ('GROUP', 'INFORMATION'))]"
+                 priority="1000"
+                 mode="M83">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="(ubl:Invoice/cac:InvoiceLine | cn:CreditNote/cac:CreditNoteLine)[not(cac:BillingReference/cac:InvoiceDocumentReference/cbc:DocumentStatusCode = ('GROUP', 'INFORMATION'))]"/>
+      <xsl:variable name="qtyNode" select="cbc:InvoicedQuantity | cbc:CreditedQuantity"/>
+      <xsl:variable name="lineNode" select="cbc:LineExtensionAmount"/>
+      <xsl:variable name="priceNode" select="cac:Price/cbc:PriceAmount"/>
+      <xsl:variable name="qtyOk" select="count($qtyNode) = 1 and $qtyNode castable as xs:decimal"/>
+      <xsl:variable name="lineOk" select="count($lineNode) = 1 and $lineNode castable as xs:decimal"/>
+      <xsl:variable name="priceOk" select="count($priceNode) = 1 and $priceNode castable as xs:decimal"/>
+      <xsl:variable name="qty" select="if ($qtyOk) then xs:decimal($qtyNode) else 0"/>
+      <xsl:variable name="net" select="if ($priceOk) then xs:decimal($priceNode) else 0"/>
+      <xsl:variable name="base" select="if (cac:Price/cbc:BaseQuantity castable as xs:decimal and xs:decimal(cac:Price/cbc:BaseQuantity) != 0) then xs:decimal(cac:Price/cbc:BaseQuantity) else 1"/>
+      <xsl:variable name="allowance" select="sum(cac:AllowanceCharge[normalize-space(cbc:ChargeIndicator) = 'false'][cbc:Amount castable as xs:decimal]/xs:decimal(cbc:Amount))"/>
+      <xsl:variable name="charge" select="sum(cac:AllowanceCharge[normalize-space(cbc:ChargeIndicator) = 'true'][cbc:Amount castable as xs:decimal]/xs:decimal(cbc:Amount))"/>
+      <xsl:variable name="declared" select="if ($lineOk) then xs:decimal($lineNode) else 0"/>
+      <xsl:variable name="expected" select="($net div $base) * $qty - $allowance + $charge"/>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="not($qtyOk and $lineOk and $priceOk) or abs($declared - $expected) le 0.01"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="not($qtyOk and $lineOk and $priceOk) or abs($declared - $expected) le 0.01">
+               <xsl:attribute name="id">BR-FR-CO-17_BT-131</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>BR-FR-CO-17/BT-131 : Ligne <xsl:value-of select="cbc:ID"/> : BT-131 (<xsl:value-of select="$declared"/>) s'écarte de plus de 0,01 du calcul BT-129 × (BT-146 / BT-149) + Σ BT-141 − Σ BT-136 (= <xsl:value-of select="round($expected * 100) div 100"/>). Avertissement : la facture n'est pas rejetée. Vérifier qu'une charge n'est pas incluse dans le prix net et redéclarée en charge de ligne.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M83"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M83"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M83">
+      <xsl:apply-templates select="*" mode="M83"/>
    </xsl:template>
 </xsl:stylesheet>

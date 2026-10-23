@@ -1925,4 +1925,21 @@
     </rule>
   </pattern>
   
+
+  <pattern id="BR-FR-CO-17">
+    <title>BR-FR-CO-17 — Line net amount coherence (warning)</title>
+    <!-- Warning only. BT-131 = BT-129 * (BT-146 / BT-149) + sum(BT-141) - sum(BT-136). -->
+    <rule context="rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'][ram:SpecifiedLineTradeDelivery/ram:BilledQuantity castable as xs:decimal][ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount castable as xs:decimal][ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount castable as xs:decimal]">
+      <let name="qty" value="xs:decimal(ram:SpecifiedLineTradeDelivery/ram:BilledQuantity)"/>
+      <let name="net" value="xs:decimal(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)"/>
+      <let name="base" value="if (ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:BasisQuantity castable as xs:decimal and xs:decimal(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:BasisQuantity) != 0) then xs:decimal(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:BasisQuantity) else 1"/>
+      <let name="allowance" value="sum(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = false()][ram:ActualAmount castable as xs:decimal]/xs:decimal(ram:ActualAmount))"/>
+      <let name="charge" value="sum(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = true()][ram:ActualAmount castable as xs:decimal]/xs:decimal(ram:ActualAmount))"/>
+      <let name="declared" value="xs:decimal(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)"/>
+      <let name="expected" value="($net div $base) * $qty - $allowance + $charge"/>
+      <assert test="abs($declared - $expected) le 0.01" flag="warning" id="BR-FR-CO-17_BT-131">
+        BR-FR-CO-17/BT-131 : Ligne <value-of select="ram:AssociatedDocumentLineDocument/ram:LineID"/> : BT-131 (<value-of select="$declared"/>) s'écarte de plus de 0,01 du calcul BT-129 × (BT-146 / BT-149) + Σ BT-141 − Σ BT-136 (= <value-of select="round($expected * 100) div 100"/>). Avertissement : la facture n'est pas rejetée. Vérifier qu'une charge n'est pas incluse dans le prix net et redéclarée en charge de ligne.
+      </assert>
+    </rule>
+  </pattern>
 </schema>

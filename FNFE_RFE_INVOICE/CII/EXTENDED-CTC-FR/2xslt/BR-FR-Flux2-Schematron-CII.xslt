@@ -840,6 +840,15 @@
             <xsl:apply-templates/>
          </svrl:active-pattern>
          <xsl:apply-templates select="/" mode="M81"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:attribute name="id">BR-FR-CO-17</xsl:attribute>
+            <xsl:attribute name="name">BR-FR-CO-17 — Line net amount coherence (warning)</xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M82"/>
       </svrl:schematron-output>
    </xsl:template>
    <!--SCHEMATRON PATTERNS-->
@@ -5865,5 +5874,43 @@
    <xsl:template match="text()" priority="-1" mode="M81"/>
    <xsl:template match="@*|node()" priority="-2" mode="M81">
       <xsl:apply-templates select="*" mode="M81"/>
+   </xsl:template>
+   <!--PATTERN BR-FR-CO-17 — Line net amount coherence (warning)-->
+   <svrl:text xmlns:svrl="http://purl.oclc.org/dsdl/svrl">BR-FR-CO-17 — Line net amount coherence (warning)</svrl:text>
+   <!--RULE -->
+   <xsl:template match="rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'][ram:SpecifiedLineTradeDelivery/ram:BilledQuantity castable as xs:decimal][ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount castable as xs:decimal][ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount castable as xs:decimal]"
+                 priority="1000"
+                 mode="M82">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'][ram:SpecifiedLineTradeDelivery/ram:BilledQuantity castable as xs:decimal][ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount castable as xs:decimal][ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount castable as xs:decimal]"/>
+      <xsl:variable name="qty" select="xs:decimal(ram:SpecifiedLineTradeDelivery/ram:BilledQuantity)"/>
+      <xsl:variable name="net" select="xs:decimal(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)"/>
+      <xsl:variable name="base" select="if (ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:BasisQuantity castable as xs:decimal and xs:decimal(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:BasisQuantity) != 0) then xs:decimal(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:BasisQuantity) else 1"/>
+      <xsl:variable name="allowance" select="sum(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = false()][ram:ActualAmount castable as xs:decimal]/xs:decimal(ram:ActualAmount))"/>
+      <xsl:variable name="charge" select="sum(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = true()][ram:ActualAmount castable as xs:decimal]/xs:decimal(ram:ActualAmount))"/>
+      <xsl:variable name="declared" select="xs:decimal(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)"/>
+      <xsl:variable name="expected" select="($net div $base) * $qty - $allowance + $charge"/>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="abs($declared - $expected) le 0.01"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="abs($declared - $expected) le 0.01">
+               <xsl:attribute name="id">BR-FR-CO-17_BT-131</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>
+        BR-FR-CO-17/BT-131 : Ligne <xsl:value-of select="ram:AssociatedDocumentLineDocument/ram:LineID"/> : BT-131 (<xsl:value-of select="$declared"/>) s'écarte de plus de 0,01 du calcul BT-129 × (BT-146 / BT-149) + Σ BT-141 − Σ BT-136 (= <xsl:value-of select="round($expected * 100) div 100"/>). Avertissement : la facture n'est pas rejetée. Vérifier qu'une charge n'est pas incluse dans le prix net et redéclarée en charge de ligne.
+      </svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M82"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M82"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M82">
+      <xsl:apply-templates select="*" mode="M82"/>
    </xsl:template>
 </xsl:stylesheet>
