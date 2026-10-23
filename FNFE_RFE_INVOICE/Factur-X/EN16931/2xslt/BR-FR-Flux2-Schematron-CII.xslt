@@ -840,6 +840,15 @@
             <xsl:apply-templates/>
          </svrl:active-pattern>
          <xsl:apply-templates select="/" mode="M81"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:attribute name="id">BR-FR-CO-18</xsl:attribute>
+            <xsl:attribute name="name">BR-FR-CO-18 — Item net price versus gross price (warning)</xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M82"/>
       </svrl:schematron-output>
    </xsl:template>
    <!--SCHEMATRON PATTERNS-->
@@ -5865,5 +5874,40 @@
    <xsl:template match="text()" priority="-1" mode="M81"/>
    <xsl:template match="@*|node()" priority="-2" mode="M81">
       <xsl:apply-templates select="*" mode="M81"/>
+   </xsl:template>
+   <!--PATTERN BR-FR-CO-18 — Item net price versus gross price (warning)-->
+   <svrl:text xmlns:svrl="http://purl.oclc.org/dsdl/svrl">BR-FR-CO-18 — Item net price versus gross price (warning)</svrl:text>
+   <!--RULE -->
+   <xsl:template match="rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'][ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount castable as xs:decimal][ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:ChargeAmount castable as xs:decimal]"
+                 priority="1000"
+                 mode="M82">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'][ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount castable as xs:decimal][ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:ChargeAmount castable as xs:decimal]"/>
+      <xsl:variable name="net" select="xs:decimal(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)"/>
+      <xsl:variable name="gross" select="xs:decimal(ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:ChargeAmount)"/>
+      <xsl:variable name="discount" select="sum(ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = false()][ram:ActualAmount castable as xs:decimal]/xs:decimal(ram:ActualAmount))"/>
+      <xsl:variable name="expected" select="$gross - $discount"/>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="abs($net - $expected) le 0.01"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="abs($net - $expected) le 0.01">
+               <xsl:attribute name="id">BR-FR-CO-18_BT-146</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>
+        BR-FR-CO-18/BT-146 : Ligne <xsl:value-of select="ram:AssociatedDocumentLineDocument/ram:LineID"/> : BT-146 (<xsl:value-of select="$net"/>) s'écarte de plus de 0,01 de BT-148 − Σ BT-147 (= <xsl:value-of select="round($expected * 100) div 100"/>). Avertissement : la facture n'est pas rejetée. La remise de prix (BT-147) reste facultative : le contrôle ne s'applique que lorsque le prix brut est transmis.
+      </svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M82"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M82"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M82">
+      <xsl:apply-templates select="*" mode="M82"/>
    </xsl:template>
 </xsl:stylesheet>

@@ -1925,4 +1925,18 @@
     </rule>
   </pattern>
   
+
+  <pattern id="BR-FR-CO-18">
+    <title>BR-FR-CO-18 — Item net price versus gross price (warning)</title>
+    <!-- Warning only, and only when BT-148 is present. BT-147 stays optional. -->
+    <rule context="rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'][ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount castable as xs:decimal][ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:ChargeAmount castable as xs:decimal]">
+      <let name="net" value="xs:decimal(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)"/>
+      <let name="gross" value="xs:decimal(ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:ChargeAmount)"/>
+      <let name="discount" value="sum(ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = false()][ram:ActualAmount castable as xs:decimal]/xs:decimal(ram:ActualAmount))"/>
+      <let name="expected" value="$gross - $discount"/>
+      <assert test="abs($net - $expected) le 0.01" flag="warning" id="BR-FR-CO-18_BT-146">
+        BR-FR-CO-18/BT-146 : Ligne <value-of select="ram:AssociatedDocumentLineDocument/ram:LineID"/> : BT-146 (<value-of select="$net"/>) s'écarte de plus de 0,01 de BT-148 − Σ BT-147 (= <value-of select="round($expected * 100) div 100"/>). Avertissement : la facture n'est pas rejetée. La remise de prix (BT-147) reste facultative : le contrôle ne s'applique que lorsque le prix brut est transmis.
+      </assert>
+    </rule>
+  </pattern>
 </schema>

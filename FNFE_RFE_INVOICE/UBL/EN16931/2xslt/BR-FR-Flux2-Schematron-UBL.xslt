@@ -848,6 +848,15 @@
             <xsl:apply-templates/>
          </svrl:active-pattern>
          <xsl:apply-templates select="/" mode="M82"/>
+         <svrl:active-pattern>
+            <xsl:attribute name="document">
+               <xsl:value-of select="document-uri(/)"/>
+            </xsl:attribute>
+            <xsl:attribute name="id">BR-FR-CO-18</xsl:attribute>
+            <xsl:attribute name="name">BR-FR-CO-18 — Item net price versus gross price (warning)</xsl:attribute>
+            <xsl:apply-templates/>
+         </svrl:active-pattern>
+         <xsl:apply-templates select="/" mode="M83"/>
       </svrl:schematron-output>
    </xsl:template>
    <!--SCHEMATRON PATTERNS-->
@@ -6021,5 +6030,38 @@
    <xsl:template match="text()" priority="-1" mode="M82"/>
    <xsl:template match="@*|node()" priority="-2" mode="M82">
       <xsl:apply-templates select="*" mode="M82"/>
+   </xsl:template>
+   <!--PATTERN BR-FR-CO-18 — Item net price versus gross price (warning)-->
+   <svrl:text xmlns:svrl="http://purl.oclc.org/dsdl/svrl">BR-FR-CO-18 — Item net price versus gross price (warning)</svrl:text>
+   <!--RULE -->
+   <xsl:template match="(ubl:Invoice/cac:InvoiceLine | cn:CreditNote/cac:CreditNoteLine)[not(cac:BillingReference/cac:InvoiceDocumentReference/cbc:DocumentStatusCode = ('GROUP', 'INFORMATION'))][cac:Price/cbc:PriceAmount castable as xs:decimal][cac:Price/cac:AllowanceCharge/cbc:BaseAmount castable as xs:decimal]"
+                 priority="1000"
+                 mode="M83">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="(ubl:Invoice/cac:InvoiceLine | cn:CreditNote/cac:CreditNoteLine)[not(cac:BillingReference/cac:InvoiceDocumentReference/cbc:DocumentStatusCode = ('GROUP', 'INFORMATION'))][cac:Price/cbc:PriceAmount castable as xs:decimal][cac:Price/cac:AllowanceCharge/cbc:BaseAmount castable as xs:decimal]"/>
+      <xsl:variable name="net" select="xs:decimal(cac:Price/cbc:PriceAmount)"/>
+      <xsl:variable name="gross" select="xs:decimal(cac:Price/cac:AllowanceCharge[cbc:BaseAmount castable as xs:decimal][1]/cbc:BaseAmount)"/>
+      <xsl:variable name="discount" select="sum(cac:Price/cac:AllowanceCharge[normalize-space(cbc:ChargeIndicator) = 'false'][cbc:Amount castable as xs:decimal]/xs:decimal(cbc:Amount))"/>
+      <xsl:variable name="expected" select="$gross - $discount"/>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="abs($net - $expected) le 0.01"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="abs($net - $expected) le 0.01">
+               <xsl:attribute name="id">BR-FR-CO-18_BT-146</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>BR-FR-CO-18/BT-146 : Ligne <xsl:value-of select="cbc:ID"/> : BT-146 (<xsl:value-of select="$net"/>) s'écarte de plus de 0,01 de BT-148 − Σ BT-147 (= <xsl:value-of select="round($expected * 100) div 100"/>). Avertissement : la facture n'est pas rejetée. La remise de prix (BT-147) reste facultative : le contrôle ne s'applique que lorsque le prix brut est transmis.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M83"/>
+   </xsl:template>
+   <xsl:template match="text()" priority="-1" mode="M83"/>
+   <xsl:template match="@*|node()" priority="-2" mode="M83">
+      <xsl:apply-templates select="*" mode="M83"/>
    </xsl:template>
 </xsl:stylesheet>

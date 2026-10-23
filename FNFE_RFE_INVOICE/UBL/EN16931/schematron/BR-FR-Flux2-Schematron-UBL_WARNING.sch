@@ -1994,4 +1994,18 @@
     </rule>
   </pattern>
   
+
+  <pattern id="BR-FR-CO-18">
+    <title>BR-FR-CO-18 — Item net price versus gross price (warning)</title>
+    <!-- Warning only, and only when BT-148 is present. Several BT-147 are summed. -->
+    <rule context="(ubl:Invoice/cac:InvoiceLine | cn:CreditNote/cac:CreditNoteLine)[not(cac:BillingReference/cac:InvoiceDocumentReference/cbc:DocumentStatusCode = ('GROUP', 'INFORMATION'))][cac:Price/cbc:PriceAmount castable as xs:decimal][cac:Price/cac:AllowanceCharge/cbc:BaseAmount castable as xs:decimal]">
+      <let name="net" value="xs:decimal(cac:Price/cbc:PriceAmount)"/>
+      <let name="gross" value="xs:decimal(cac:Price/cac:AllowanceCharge[cbc:BaseAmount castable as xs:decimal][1]/cbc:BaseAmount)"/>
+      <let name="discount" value="sum(cac:Price/cac:AllowanceCharge[normalize-space(cbc:ChargeIndicator) = 'false'][cbc:Amount castable as xs:decimal]/xs:decimal(cbc:Amount))"/>
+      <let name="expected" value="$gross - $discount"/>
+      <assert test="abs($net - $expected) le 0.01" flag="warning" id="BR-FR-CO-18_BT-146">
+        BR-FR-CO-18/BT-146 : Ligne <value-of select="cbc:ID"/> : BT-146 (<value-of select="$net"/>) s'écarte de plus de 0,01 de BT-148 − Σ BT-147 (= <value-of select="round($expected * 100) div 100"/>). Avertissement : la facture n'est pas rejetée. La remise de prix (BT-147) reste facultative : le contrôle ne s'applique que lorsque le prix brut est transmis.
+      </assert>
+    </rule>
+  </pattern>
 </schema>
